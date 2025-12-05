@@ -1,6 +1,4 @@
-import { useState, useRef } from 'react';
 import { Loader2, Printer } from 'lucide-react';
-import { useFileTreeStore } from '../../../stores/fileTreeStore';
 import { useThemeStore } from '../../../stores/themeStore';
 import { AwaitRender } from '../../common/AwaitRender';
 
@@ -24,37 +22,17 @@ const MainButton: React.FC<MainButtonProps> = ({ disabled, isLight, label, onCli
 
 export const PrintButton: React.FC = () => {
   const theme = useThemeStore((s) => s.theme);
-  const selectedFile = useFileTreeStore((s) => s.selectedFile);
   const isLight = theme === 'light';
-  const [pendingPrint, setPendingPrint] = useState(false);
-
-  const prevSelectedFile = useRef(selectedFile);
-  const prevIsLight = useRef(isLight);
-
-  if (prevSelectedFile.current !== selectedFile) {
-    prevSelectedFile.current = selectedFile;
-    if (pendingPrint) setPendingPrint(false);
-  }
-
-  if (prevIsLight.current !== isLight) {
-    prevIsLight.current = isLight;
-    if (!isLight && pendingPrint) setPendingPrint(false);
-  }
 
   const handlePrint = () => {
-    const setTheme = useThemeStore.getState().setTheme;
-
     if (!isLight) {
-      setTheme('light');
-      setPendingPrint(true);
+      useThemeStore.getState().setTheme('light');
       return;
     }
-
     window.print();
-    setPendingPrint(false);
   };
 
-  const label = pendingPrint || isLight ? 'Print' : 'Prepare Print (to light theme)';
+  const label = isLight ? 'Print' : 'Prepare Print (to light theme)';
 
   return (
     <AwaitRender scope="#document-content" pending={<MainButton disabled isLight={isLight} label={label} onClick={handlePrint} />}>
@@ -62,3 +40,4 @@ export const PrintButton: React.FC = () => {
     </AwaitRender>
   );
 };
+
