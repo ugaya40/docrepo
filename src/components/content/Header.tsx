@@ -21,6 +21,7 @@ const formatDate = (dateStr: string) => {
 export const Header: React.FC = () => {
   const selectedRepo = useRepoContextStore((s) => s.selectedRepo);
   const selectedFile = useFileTreeStore((s) => s.selectedFile);
+  const isLoadingTree = useFileTreeStore((s) => s.isLoadingTree);
   const updatedAt = useContentStore((s) => s.updatedAt);
   const isLoadingContent = useContentStore((s) => s.isLoadingContent);
   const headerVisible = useLayoutStore((s) => s.headerVisible);
@@ -79,7 +80,7 @@ export const Header: React.FC = () => {
               <ShareActions />
               <button
                 onClick={handleRefreshContent}
-                className={`p-2 rounded-lg transition-all ${isLoadingContent ? 'animate-spin text-indigo-400' : ''} ${isLight ? 'text-slate-500 hover:text-indigo-500 hover:bg-slate-200' : 'text-slate-400 hover:text-indigo-400 hover:bg-slate-800'}`}
+                className={`p-2 rounded-lg transition-all ${(isLoadingContent || isLoadingTree) ? 'animate-spin text-indigo-400' : ''} ${isLight ? 'text-slate-500 hover:text-indigo-500 hover:bg-slate-200' : 'text-slate-400 hover:text-indigo-400 hover:bg-slate-800'}`}
                 title="Refresh Content"
               >
                 <RefreshCw size={18} />
@@ -104,7 +105,7 @@ export const Header: React.FC = () => {
             <ShareActions />
             <button
               onClick={handleRefreshContent}
-              className={`p-1 rounded transition-all ${isLoadingContent ? 'animate-spin text-indigo-400' : ''} ${isLight ? 'text-slate-500 hover:text-indigo-500 hover:bg-slate-200' : 'text-slate-400 hover:text-indigo-400 hover:bg-slate-800'}`}
+              className={`p-1 rounded transition-all ${(isLoadingContent || isLoadingTree) ? 'animate-spin text-indigo-400' : ''} ${isLight ? 'text-slate-500 hover:text-indigo-500 hover:bg-slate-200' : 'text-slate-400 hover:text-indigo-400 hover:bg-slate-800'}`}
               title="Refresh Content"
             >
               <RefreshCw size={16} />

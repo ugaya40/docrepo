@@ -1,4 +1,5 @@
-# docRepo
+# docRepo　[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 
 https://docrepo.pages.dev/
 
@@ -92,7 +93,7 @@ A setup guide for those who want to host their own instance. As a static SPA (Si
 #### 1. Clone Repository and Install Dependencies
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/ugaya40/docrepo.git
 cd docRepo
 npm install
 ```
@@ -118,7 +119,7 @@ npm install
 2. Add `repo read:user` to **Additional Scopes** (required for private repository access).
 3. After saving, add the following to **Authentication > URL Configuration > Redirect URLs**:
    - `http://localhost:5173` (for local development)
-   - `https://<your-deploy-url>.com` (for production)
+   - `https://<your-deploy-url>` (for production)
 
 #### 5. Set Environment Variables
 
