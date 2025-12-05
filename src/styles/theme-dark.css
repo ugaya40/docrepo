@@ -1,0 +1,61 @@
+.dark {
+  --color-bg-primary: #020617;
+  --color-bg-secondary: #0f172a;
+  --color-bg-tertiary: #1e293b;
+  --color-bg-hover: #334155;
+  --color-text-primary: #f1f5f9;
+  --color-text-secondary: #94a3b8;
+  --color-text-muted: #64748b;
+  --color-border: #334155;
+  --color-border-light: #1e293b;
+}
+
+@layer components {
+  /* KaTeX */
+  .dark .katex-display {
+    @apply bg-linear-to-r from-slate-900 to-transparent border-l-4 border-indigo-500;
+  }
+  .dark .katex-display > .katex {
+    @apply text-lg text-slate-200;
+  }
+  .dark .katex {
+    @apply text-emerald-400;
+  }
+
+  /* Scrollbar */
+  .dark .custom-scrollbar {
+    scrollbar-color: rgba(255,255,255,0.15) transparent;
+  }
+  .dark .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.15);
+  }
+  .dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(255,255,255,0.25);
+  }
+
+  /* GitHub Alerts */
+  .dark .markdown-alert {
+    @apply bg-slate-900/50;
+  }
+  .dark .markdown-alert-note .markdown-alert-title { @apply text-blue-400; }
+  .dark .markdown-alert-tip .markdown-alert-title { @apply text-emerald-400; }
+  .dark .markdown-alert-important .markdown-alert-title { @apply text-purple-400; }
+  .dark .markdown-alert-warning .markdown-alert-title { @apply text-amber-400; }
+  .dark .markdown-alert-caution .markdown-alert-title { @apply text-red-400; }
+
+  /* Task list checkbox */
+  .dark input[type="checkbox"]:disabled {
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border: 2px solid #64748b;
+    border-radius: 3px;
+    background: transparent;
+    cursor: default;
+  }
+  .dark input[type="checkbox"]:disabled:checked {
+    background: #6366f1;
+    border-color: #6366f1;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='white' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round' fill='none' d='M3 8l3.5 3.5L13 5'/%3E%3C/svg%3E");
+  }
+}

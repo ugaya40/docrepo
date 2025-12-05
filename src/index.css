@@ -1,0 +1,116 @@
+@import "tailwindcss";
+@import "./styles/theme-dark.css";
+@import "./styles/theme-light.css";
+@plugin "@tailwindcss/typography";
+
+html, body {
+  overscroll-behavior: none;
+}
+
+@layer components {
+
+  .prose :is(h1, h2, h3, h4, h5, h6) {
+    scroll-margin-top: 60px;
+  }
+
+  /* KaTeX - shared */
+  .katex-display {
+    @apply my-6 py-4 px-6 overflow-x-auto;
+  }
+  .katex {
+    @apply font-medium;
+  }
+  .katex .frac-line {
+    border-bottom-width: 2px;
+  }
+
+  /* Scrollbar - shared */
+  .custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-gutter: stable;
+  }
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+  }
+
+  /* Animation */
+  @keyframes content-fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(5px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  .animate-content-fadeIn {
+    animation: content-fadeIn 0.3s ease-out forwards;
+  }
+
+  /* GitHub Alerts - shared */
+  .markdown-alert {
+    @apply border-l-4 rounded-r-lg px-4 py-3 my-4;
+  }
+  .markdown-alert-title {
+    @apply flex items-center gap-2 font-semibold text-sm mb-1;
+  }
+  .markdown-alert-title svg {
+    @apply fill-current w-4 h-4;
+  }
+  .markdown-alert-note { @apply border-blue-500; }
+  .markdown-alert-tip { @apply border-emerald-500; }
+  .markdown-alert-important { @apply border-purple-500; }
+  .markdown-alert-warning { @apply border-amber-500; }
+  .markdown-alert-caution { @apply border-red-500; }
+}
+
+/* Sonner Toast close button */
+.toast-close-button {
+  right: 8px !important;
+  top: 50% !important;
+  left: auto !important;
+  transform: translateY(-50%) !important;
+  width: 32px !important;
+  height: 32px !important;
+  border: none !important;
+  background: transparent !important;
+  opacity: 0.6 !important;
+}
+.toast-close-button:hover {
+  opacity: 1 !important;
+}
+.toast-close-button svg {
+  width: 20px !important;
+  height: 20px !important;
+}
+
+@media print {
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  html, body, main, #root, [class*="flex"], [class*="overflow"] {
+    overflow: visible !important;
+    height: auto !important;
+    max-height: none !important;
+  }
+  header, aside, nav {
+    display: none !important;
+  }
+  #document-content {
+    position: static !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 20px !important;
+  }
+  main {
+    margin-left: 0 !important;
+    padding: 0 !important;
+  }
+}
