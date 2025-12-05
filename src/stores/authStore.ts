@@ -78,6 +78,13 @@ export const useAuthStore = create<AuthStore>()(
     {
       name: 'auth-storage',
       partialize: (state) => ({ providerToken: state.providerToken }),
+      onRehydrateStorage: () => {
+        return (state, error) => {
+          if (!error && state) {
+            state.initialize();
+          }
+        };
+      },
     }
   )
 );

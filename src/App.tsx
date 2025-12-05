@@ -8,12 +8,7 @@ import { MainApp } from './components/MainApp';
 export default function App() {
   const isLoggedIn = useAuthStore((s) => s.isLoggedIn);
   const isLoading = useAuthStore((s) => s.isLoading);
-  const initialize = useAuthStore.getState().initialize;
   const theme = useThemeStore((s) => s.theme);
-
-  useEffect(() => {
-    initialize();
-  }, []);
 
   useEffect(() => {
 
