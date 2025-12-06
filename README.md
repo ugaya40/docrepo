@@ -45,13 +45,19 @@ docRepo was developed with the goal of treating GitHub as your document reposito
 - **Smart Caching**: Repository structures and files are cached in IndexedDB upon viewing, ensuring fast access even when offline or on unstable networks (on a best-effort basis)
 
 ### Export & Sharing
-- **Single HTML Export**:
-  - Exports the current Markdown as a styled single HTML file.
-  - **Private Image Embedding**: Images from private repositories are automatically Base64-encoded and embedded inline. Recipients can view the single HTML file without needing any authentication.
-    - *Note*: Due to browser CORS restrictions, some external images (e.g., badges from shields.io) cannot be embedded. Use images stored within your repository or from servers that allow cross-origin requests.
-- **Print / PDF**:
-  - Print-optimized styling. Clean PDF output even from iOS/iPadOS mobile devices.
-  - *Tips: To create a PDF on iOS/iPadOS, select "Print" from the share menu, then pinch-out (zoom) on the preview to open as PDF.*
+
+- **Single HTML Export (Portable & Offline-viewable)**
+  - Creates a single, standalone HTML file that works entirely offline. Perfect for sharing via email or chat, similar to a PDF.
+  - **Zero External Dependencies**: Formulas (KaTeX) and diagrams (Mermaid) are pre-rendered to SVG and embedded as base64.
+  - **Smart Image Embedding**: Images from your GitHub repositories, including private repositories, are automatically embedded.
+    - *Limitation*: Some external web images (e.g., badges) cannot be embedded due to browser security restrictions (CORS).
+  - **Recommendation**: Store images for shared documents within your repository whenever possible. This helps ensure a fully self-contained HTML export that requires no network access.
+
+- **Print / PDF**
+  - Printer-friendly styling produces clean PDFs, even from mobile browsers.
+  - *iOS/iPadOS Tip*: Tap "Print" in the share sheet, then **pinch out (zoom in)** on the preview page to open and save it as a PDF.
+  - *Note*: iOS Safari may display a warning about "automatic printing." This is expected behavior for print actions and is safe to proceed.
+
 
 ## Usage
 
