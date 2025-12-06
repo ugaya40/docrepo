@@ -56,6 +56,9 @@
   .light code.hljs {
     background: transparent !important;
   }
+  .light .prose pre code {
+    color: #1f2937 !important;
+  }
 
   /* Task list checkbox */
   .light input[type="checkbox"]:disabled {

@@ -48,6 +48,7 @@ docRepo was developed with the goal of treating GitHub as your document reposito
 - **Single HTML Export**:
   - Exports the current Markdown as a styled single HTML file.
   - **Private Image Embedding**: Images from private repositories are automatically Base64-encoded and embedded inline. Recipients can view the single HTML file without needing any authentication.
+    - *Note*: Due to browser CORS restrictions, some external images (e.g., badges from shields.io) cannot be embedded. Use images stored within your repository or from servers that allow cross-origin requests.
 - **Print / PDF**:
   - Print-optimized styling. Clean PDF output even from iOS/iPadOS mobile devices.
   - *Tips: To create a PDF on iOS/iPadOS, select "Print" from the share menu, then pinch-out (zoom) on the preview to open as PDF.*

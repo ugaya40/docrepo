@@ -50,15 +50,15 @@ export const DownloadAsHtmlButton: React.FC<DownloadAsHtmlButtonProps> = ({
         .use(remarkEmoji)
         .use(remarkRehype, { allowDangerousHtml: true })
         .use(rehypeRaw)
+        .use(rehypeMermaid)
+        .use(rehypeKatex)
+        .use(rehypeKatexToSvg)
+        .use(rehypeHighlight)
         .use(rehypeEmbedImages, {
           filePath: selectedFile.path,
           repoOwner: selectedRepo.owner,
           repoName: selectedRepo.name,
         })
-        .use(rehypeMermaid)
-        .use(rehypeKatex)
-        .use(rehypeKatexToSvg)
-        .use(rehypeHighlight)
         .use(rehypeStringify)
         .process(content);
 
