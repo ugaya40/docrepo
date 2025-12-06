@@ -36,17 +36,27 @@ const renderKatexToSvg = async (katexHtml: string, isBlock: boolean): Promise<st
   `;
   document.body.appendChild(container);
 
-  const externalStylesheets = Array.from(document.querySelectorAll('link[rel="stylesheet"]')) as HTMLLinkElement[];
-  externalStylesheets.forEach((link) => (link.disabled = true));
+  // Temporarily suppress CORS errors from html-to-image
+  const originalConsoleError = console.error;
+  console.error = (...args: unknown[]) => {
+    const msg = args[0];
+    if (typeof msg === 'string' && (
+      msg.startsWith('Error while reading CSS rules from') ||
+      msg.startsWith('Error inlining remote css file')
+    )) {
+      return;
+    }
+    originalConsoleError.apply(console, args);
+  };
 
   try {
     const target = container.querySelector('#katex-render-target') as HTMLElement;
     const svg = await toSvg(target, {
-      backgroundColor: 'transparent',
+      backgroundColor: 'transparent'
     });
     return svg;
   } finally {
-    externalStylesheets.forEach((link) => (link.disabled = false));
+    console.error = originalConsoleError;
     document.body.removeChild(container);
   }
 };
@@ -71,6 +81,8 @@ export const rehypeKatexToSvg = () => {
         }
       }
     });
+
+    if (katexNodes.length === 0) return;
 
     for (const { node, parent, index, isBlock } of katexNodes) {
       try {

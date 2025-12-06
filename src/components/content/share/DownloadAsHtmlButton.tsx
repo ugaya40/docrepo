@@ -1,24 +1,6 @@
-import { useState } from 'react';
 import { Loader2, Download } from 'lucide-react';
-import { unified } from 'unified';
-import remarkParse from 'remark-parse';
-import remarkGfm from 'remark-gfm';
-import remarkMath from 'remark-math';
-import { remarkAlert } from 'remark-github-blockquote-alert';
-import remarkEmoji from 'remark-emoji';
-import remarkRehype from 'remark-rehype';
-import rehypeKatex from 'rehype-katex';
-import rehypeHighlight from 'rehype-highlight';
-import rehypeStringify from 'rehype-stringify';
-import rehypeRaw from 'rehype-raw';
-import { useContentStore } from '../../../stores/contentStore';
-import { useFileTreeStore } from '../../../stores/fileTreeStore';
-import { useRepoContextStore } from '../../../stores/repoContextStore';
 import { useThemeStore } from '../../../stores/themeStore';
-import { rehypeEmbedImages } from '../download/rehypeEmbedImages';
-import { rehypeMermaid } from '../download/rehypeMermaid';
-import { rehypeKatexToSvg } from '../download/rehypeKatexToSvg';
-import { createHtmlDocument } from '../download/htmlTemplate';
+import { useGenerateHtml } from './useGenerateHtml';
 
 interface DownloadAsHtmlButtonProps {
   onDownloadStart?: () => void;
@@ -29,62 +11,33 @@ export const DownloadAsHtmlButton: React.FC<DownloadAsHtmlButtonProps> = ({
   onDownloadStart,
   onDownloadEnd,
 }) => {
-  const content = useContentStore((s) => s.content);
-  const selectedFile = useFileTreeStore((s) => s.selectedFile);
-  const selectedRepo = useRepoContextStore((s) => s.selectedRepo);
   const theme = useThemeStore((s) => s.theme);
   const isLight = theme === 'light';
-  const [isGenerating, setIsGenerating] = useState(false);
+  const { generateHtml, isGenerating } = useGenerateHtml();
 
-  const handleDownloadHtml = async () => {
-    if (isGenerating || !content || !selectedFile || !selectedRepo) return;
-    setIsGenerating(true);
+  const handleDownload = async () => {
     onDownloadStart?.();
 
     try {
-      const file = await unified()
-        .use(remarkParse)
-        .use(remarkGfm)
-        .use(remarkMath)
-        .use(remarkAlert)
-        .use(remarkEmoji)
-        .use(remarkRehype, { allowDangerousHtml: true })
-        .use(rehypeRaw)
-        .use(rehypeMermaid)
-        .use(rehypeKatex)
-        .use(rehypeKatexToSvg)
-        .use(rehypeHighlight)
-        .use(rehypeEmbedImages, {
-          filePath: selectedFile.path,
-          repoOwner: selectedRepo.owner,
-          repoName: selectedRepo.name,
-        })
-        .use(rehypeStringify)
-        .process(content);
+      const result = await generateHtml();
+      if (!result) return;
 
-      const htmlContent = createHtmlDocument(selectedFile.name, String(file));
-
-      const blob = new Blob([htmlContent], { type: 'text/html' });
-      const url = URL.createObjectURL(blob);
+      const url = URL.createObjectURL(result.blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = selectedFile.name.replace(/\.md$/i, '.html');
+      a.download = result.fileName;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
-
-    } catch (e) {
-      console.error('Failed to generate HTML', e);
     } finally {
-      setIsGenerating(false);
       onDownloadEnd?.();
     }
   };
 
   return (
     <button
-      onClick={handleDownloadHtml}
+      onClick={handleDownload}
       disabled={isGenerating}
       className={`w-full flex items-center gap-2 px-3 py-2 text-sm transition-colors ${isLight ? 'text-slate-600 hover:text-slate-800 hover:bg-slate-100' : 'text-slate-300 hover:text-white hover:bg-slate-700'}`}
     >

@@ -1,10 +1,12 @@
 import { useState, useRef, useEffect } from 'react';
 import { MoreVertical, Loader2 } from 'lucide-react';
+import { isMobile } from 'react-device-detect';
 import { useContentStore } from '../../../stores/contentStore';
 import { useFileTreeStore } from '../../../stores/fileTreeStore';
 import { useRepoContextStore } from '../../../stores/repoContextStore';
 import { useThemeStore } from '../../../stores/themeStore';
 import { DownloadAsHtmlButton } from './DownloadAsHtmlButton';
+import { ShareAsHtmlButton } from './ShareAsHtmlButton';
 import { PrintButton } from './PrintButton';
 
 export const ShareActions: React.FC = () => {
@@ -46,6 +48,12 @@ export const ShareActions: React.FC = () => {
             onDownloadStart={() => { setIsGenerating(true); setShowMenu(false); }}
             onDownloadEnd={() => setIsGenerating(false)}
           />
+          {isMobile && (
+            <ShareAsHtmlButton
+              onShareStart={() => { setIsGenerating(true); setShowMenu(false); }}
+              onShareEnd={() => setIsGenerating(false)}
+            />
+          )}
           <PrintButton />
         </div>
       )}
