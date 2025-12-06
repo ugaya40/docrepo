@@ -14,6 +14,10 @@ This document is for testing all Markdown syntax, extensions, and rendering feat
 - [ ] Task List Pending
 - [Link Text](#)
 - Auto link: https://github.com
+    1. inner1
+    2. inner2
+        - nest1
+        - nest 2
 
 ### Tables
 | Left align | Center align | Right align |
