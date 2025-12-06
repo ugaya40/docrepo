@@ -33,6 +33,14 @@ This document is for testing all Markdown syntax, extensions, and rendering feat
 
 ## 2. Syntax Highlighting
 
+### Inline Code
+- Variable: `const userName = "Alice"`
+- Function call: `console.log(message)`
+- Type: `interface User { id: number }`
+- Command: `npm install`
+
+### Code Blocks
+
 ```typescript
 // TypeScript Example
 interface User {
