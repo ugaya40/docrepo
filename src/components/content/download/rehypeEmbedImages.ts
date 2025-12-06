@@ -4,8 +4,8 @@ import { useFileTreeStore } from '../../../stores/fileTreeStore';
 import { githubApi } from '../../../lib/github';
 import { resolvePath } from '../renderer/resolvePath';
 
-const getMimeType = (filename: string): string => {
-  const ext = filename.split('.').pop()?.toLowerCase();
+const getMimeType = (url: string): string => {
+  const ext = url.split('.').pop()?.toLowerCase().split('?')[0];
   switch (ext) {
     case 'png': return 'image/png';
     case 'jpg':
@@ -13,7 +13,26 @@ const getMimeType = (filename: string): string => {
     case 'gif': return 'image/gif';
     case 'svg': return 'image/svg+xml';
     case 'webp': return 'image/webp';
-    default: return 'application/octet-stream';
+    case 'ico': return 'image/x-icon';
+    case 'bmp': return 'image/bmp';
+    default: return 'image/png';
+  }
+};
+
+const fetchExternalImageAsBase64 = async (url: string): Promise<string | null> => {
+  try {
+    const response = await fetch(url);
+    if (!response.ok) return null;
+
+    const blob = await response.blob();
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result as string);
+      reader.onerror = () => resolve(null);
+      reader.readAsDataURL(blob);
+    });
+  } catch {
+    return null;
   }
 };
 
@@ -33,7 +52,18 @@ export const rehypeEmbedImages = (options: Options) => {
       if (node.tagName === 'img' && node.properties && typeof node.properties.src === 'string') {
         const src = node.properties.src;
 
-        if (src.startsWith('http') || src.startsWith('data:')) return;
+        if (src.startsWith('data:')) return;
+
+        if (src.startsWith('http://') || src.startsWith('https://')) {
+          const promise = async () => {
+            const base64 = await fetchExternalImageAsBase64(src);
+            if (base64) {
+              node.properties!.src = base64;
+            }
+          };
+          promises.push(promise());
+          return;
+        }
 
         const promise = async () => {
           try {
@@ -47,7 +77,7 @@ export const rehypeEmbedImages = (options: Options) => {
             const base64Content = blobRes.content.replace(/\n/g, '');
             const mime = getMimeType(targetPath);
 
-            node.properties.src = `data:${mime};base64,${base64Content}`;
+            node.properties!.src = `data:${mime};base64,${base64Content}`;
           } catch (error) {
             console.error(`Failed to embed image: ${src}`, error);
           }

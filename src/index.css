@@ -67,6 +67,17 @@ html, body {
   .markdown-alert-important { @apply border-purple-500; }
   .markdown-alert-warning { @apply border-amber-500; }
   .markdown-alert-caution { @apply border-red-500; }
+
+  /* Remove backticks and font-weight from inline code */
+  .prose :not(pre) > code::before,
+  .prose :not(pre) > code::after {
+    content: none !important;
+  }
+  .prose :not(pre) > code {
+    font-weight: normal !important;
+    padding: 0.2em 0.4em;
+    border-radius: 6px;
+  }
 }
 
 /* Sonner Toast close button */

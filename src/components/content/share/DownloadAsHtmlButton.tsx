@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Loader2, FileText } from 'lucide-react';
+import { Loader2, Download } from 'lucide-react';
 import { unified } from 'unified';
 import remarkParse from 'remark-parse';
 import remarkGfm from 'remark-gfm';
@@ -17,16 +17,15 @@ import { useRepoContextStore } from '../../../stores/repoContextStore';
 import { useThemeStore } from '../../../stores/themeStore';
 import { rehypeEmbedImages } from '../download/rehypeEmbedImages';
 import { rehypeMermaid } from '../download/rehypeMermaid';
+import { rehypeKatexToSvg } from '../download/rehypeKatexToSvg';
 import { createHtmlDocument } from '../download/htmlTemplate';
 
 interface DownloadAsHtmlButtonProps {
-  downloadTheme: 'light' | 'dark';
   onDownloadStart?: () => void;
   onDownloadEnd?: () => void;
 }
 
 export const DownloadAsHtmlButton: React.FC<DownloadAsHtmlButtonProps> = ({
-  downloadTheme,
   onDownloadStart,
   onDownloadEnd,
 }) => {
@@ -58,11 +57,12 @@ export const DownloadAsHtmlButton: React.FC<DownloadAsHtmlButtonProps> = ({
         })
         .use(rehypeMermaid)
         .use(rehypeKatex)
+        .use(rehypeKatexToSvg)
         .use(rehypeHighlight)
         .use(rehypeStringify)
         .process(content);
 
-      const htmlContent = createHtmlDocument(selectedFile.name, String(file), downloadTheme);
+      const htmlContent = createHtmlDocument(selectedFile.name, String(file));
 
       const blob = new Blob([htmlContent], { type: 'text/html' });
       const url = URL.createObjectURL(blob);
@@ -88,8 +88,8 @@ export const DownloadAsHtmlButton: React.FC<DownloadAsHtmlButtonProps> = ({
       disabled={isGenerating}
       className={`w-full flex items-center gap-2 px-3 py-2 text-sm transition-colors ${isLight ? 'text-slate-600 hover:text-slate-800 hover:bg-slate-100' : 'text-slate-300 hover:text-white hover:bg-slate-700'}`}
     >
-      {isGenerating ? <Loader2 size={14} className="animate-spin" /> : <FileText size={14} />}
-      download HTML ({downloadTheme})
+      {isGenerating ? <Loader2 size={14} className="animate-spin" /> : <Download size={14} />}
+      Download HTML
     </button>
   );
 };

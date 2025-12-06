@@ -43,6 +43,11 @@
   .dark .markdown-alert-warning .markdown-alert-title { @apply text-amber-400; }
   .dark .markdown-alert-caution .markdown-alert-title { @apply text-red-400; }
 
+  /* Inline code */
+  .dark .prose :not(pre) > code {
+    background: rgba(255, 255, 255, 0.18);
+  }
+
   /* Task list checkbox */
   .dark input[type="checkbox"]:disabled {
     appearance: none;

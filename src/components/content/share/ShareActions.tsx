@@ -41,14 +41,8 @@ export const ShareActions: React.FC = () => {
       </button>
 
       {showMenu && (
-        <div className={`absolute right-0 top-full mt-1 border rounded-lg shadow-xl z-20 min-w-64 [&>*:first-child]:rounded-t-lg [&>*:last-child]:rounded-b-lg ${isLight ? 'bg-white border-slate-300' : 'bg-slate-800 border-slate-700'}`}>
+        <div className={`absolute right-0 top-full mt-1 border rounded-lg shadow-xl z-20 min-w-48 [&>*:first-child]:rounded-t-lg [&>*:last-child]:rounded-b-lg ${isLight ? 'bg-white border-slate-300' : 'bg-slate-800 border-slate-700'}`}>
           <DownloadAsHtmlButton
-            downloadTheme="dark"
-            onDownloadStart={() => { setIsGenerating(true); setShowMenu(false); }}
-            onDownloadEnd={() => setIsGenerating(false)}
-          />
-          <DownloadAsHtmlButton
-            downloadTheme="light"
             onDownloadStart={() => { setIsGenerating(true); setShowMenu(false); }}
             onDownloadEnd={() => setIsGenerating(false)}
           />
