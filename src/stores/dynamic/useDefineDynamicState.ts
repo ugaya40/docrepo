@@ -2,15 +2,23 @@ import { useEffect, useRef } from "react";
 import { useRawDynamicStore } from "./useRawDynamicStore";
 
 export const useDefineDynamicState = <T>(key: string, initialValue: T) => {
-  const set = useRawDynamicStore((s) => s.set);
   const remove = useRawDynamicStore((s) => s.remove);
   const initialValueRef = useRef(initialValue);
+  const prevKeyRef = useRef<string | null>(null);
+
+  const state = useRawDynamicStore.getState();
+
+  if (prevKeyRef.current !== key) {
+    if (state.states.has(key)) {
+      throw new Error(`Dynamic state "${key}" is already defined.`);
+    }
+    state.set(key, initialValueRef.current);
+    prevKeyRef.current = key;
+  }
 
   useEffect(() => {
-    set(key, initialValueRef.current);
-
     return () => {
       remove(key);
     };
-  }, [key, set, remove]);
+  }, [key, remove]);
 };

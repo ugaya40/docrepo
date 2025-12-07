@@ -1,6 +1,7 @@
 import { Loader2, Printer } from 'lucide-react';
 import { useThemeStore } from '../../../stores/themeStore';
-import { AwaitRender } from '../../common/AwaitRender';
+import { useDynamicState } from '../../../stores/dynamic/useDynamicState';
+import { useContentRenderSessionStore, type ContentRenderSessionState } from '../../../stores/sequences/contentRenderSession';
 
 type MainButtonProps = {
   disabled?: boolean;
@@ -23,6 +24,9 @@ const MainButton: React.FC<MainButtonProps> = ({ disabled, isLight, label, onCli
 export const PrintButton: React.FC = () => {
   const theme = useThemeStore((s) => s.theme);
   const isLight = theme === 'light';
+  const sessionKey = useContentRenderSessionStore((s) => s.getSessionKey());
+  const [sessionState] = useDynamicState<ContentRenderSessionState>(sessionKey);
+  const isPrintReady = !isLight || sessionState.pendingRenderCount === 0;
 
   const handlePrint = () => {
     if (!isLight) {
@@ -34,10 +38,6 @@ export const PrintButton: React.FC = () => {
 
   const label = isLight ? 'Print' : 'Prepare Print (to light theme)';
 
-  return (
-    <AwaitRender scope="#document-content" pending={<MainButton disabled isLight={isLight} label={label} onClick={handlePrint} />}>
-      <MainButton isLight={isLight} label={label} onClick={handlePrint} />
-    </AwaitRender>
-  );
+  return <MainButton disabled={!isPrintReady} isLight={isLight} label={label} onClick={handlePrint} />;
 };
 

@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { useContentRenderSessionStore } from './sequences/contentRenderSession';
 
 type Theme = 'light' | 'dark';
 
@@ -11,11 +12,18 @@ type ThemeStore = {
 
 export const useThemeStore = create<ThemeStore>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       theme: 'dark',
-      toggleTheme: () =>
-        set((state) => ({ theme: state.theme === 'dark' ? 'light' : 'dark' })),
-      setTheme: (theme) => set({ theme }),
+      toggleTheme: () => {
+        useContentRenderSessionStore.getState().nextSession();
+        set((state) => ({ theme: state.theme === 'dark' ? 'light' : 'dark' }));
+      },
+      setTheme: (theme) => {
+        if (get().theme !== theme) {
+          useContentRenderSessionStore.getState().nextSession();
+        }
+        set({ theme });
+      },
     }),
     {
       name: 'docrepo-theme',

@@ -3,6 +3,7 @@ import type { Repo, FileNode } from '../types';
 import { githubApi, type GitTreeItem } from '../lib/github';
 import { cacheService } from '../services/cacheService';
 import { useContentStore } from './contentStore';
+import { useContentRenderSessionStore } from './sequences/contentRenderSession';
 
 type FileTreeState = {
   files: FileNode[];
@@ -85,76 +86,85 @@ const saveTreeCache = async (repo: Repo, state: FileTreeState) => {
   });
 };
 
-export const useFileTreeStore = create<FileTreeStore>((set, get) => ({
-  ...initialState,
-
-  async restore(repo) {
-    const cached = await cacheService.getRepoTree(repo.fullName, repo.currentBranch);
-    if (cached) {
-      set({
-        files: cached.files,
-        expandedIds: new Set(cached.expandedIds),
-        selectedFile: cached.selectedFile,
-      });
-
-      if (cached.selectedFile) {
-        await useContentStore.getState().loadContent(repo, cached.selectedFile);
-      }
+export const useFileTreeStore = create<FileTreeStore>((set, get) => {
+  const setSelectedFileInternal = async (
+    repo: Repo,
+    newFile: FileNode | null,
+    options?: { skipSaveCache?: boolean }
+  ) => {
+    const current = get().selectedFile;
+    if (current?.path !== newFile?.path) {
+      useContentRenderSessionStore.getState().nextSession();
     }
-  },
+    set({ selectedFile: newFile });
 
-  async loadTree(repo) {
-    set({ isLoadingTree: true });
+    if (!options?.skipSaveCache) {
+      await saveTreeCache(repo, get());
+    }
 
-    try {
-      const treeResponse = await githubApi.getTree(repo.owner, repo.name, repo.currentBranch);
-      const files = buildFileTree(treeResponse.items);
-      set({ files, expandedIds: new Set(), selectedFile: null, isLoadingTree: false });
+    if (newFile) {
+      await useContentStore.getState().loadContent(repo, newFile);
+    } else if (current) {
       useContentStore.getState().clear();
-      await saveTreeCache(repo, get());
-    } catch {
-      set({ isLoadingTree: false });
     }
-  },
+  };
 
-  async refreshTree(repo, showLoading) {
-    if (showLoading) {
+  return {
+    ...initialState,
+
+    async restore(repo) {
+      const cached = await cacheService.getRepoTree(repo.fullName, repo.currentBranch);
+      if (cached) {
+        set({
+          files: cached.files,
+          expandedIds: new Set(cached.expandedIds),
+        });
+        await setSelectedFileInternal(repo, cached.selectedFile, { skipSaveCache: true });
+      }
+    },
+
+    async loadTree(repo) {
       set({ isLoadingTree: true });
-    }
 
-    try {
-      const treeResponse = await githubApi.getTree(repo.owner, repo.name, repo.currentBranch);
-      const files = buildFileTree(treeResponse.items);
-      const { expandedIds, selectedFile } = get();
-
-      let newSelectedFile: FileNode | null = null;
-      if (selectedFile) {
-        newSelectedFile = findNodeByPath(files, selectedFile.path);
-      }
-
-      set({ files, expandedIds, selectedFile: newSelectedFile, isLoadingTree: false });
-      await saveTreeCache(repo, get());
-
-      if (newSelectedFile) {
-        await useContentStore.getState().loadContent(repo, newSelectedFile);
-      } else if (selectedFile) {
+      try {
+        const treeResponse = await githubApi.getTree(repo.owner, repo.name, repo.currentBranch);
+        const files = buildFileTree(treeResponse.items);
+        set({ files, expandedIds: new Set(), selectedFile: null, isLoadingTree: false });
         useContentStore.getState().clear();
+        await saveTreeCache(repo, get());
+      } catch {
+        set({ isLoadingTree: false });
       }
-    } catch {
-      set({ isLoadingTree: false });
-    }
-  },
+    },
 
-  async selectFile(repo, file) {
-    if (file.type === 'dir') return;
+    async refreshTree(repo, showLoading) {
+      if (showLoading) {
+        set({ isLoadingTree: true });
+      }
 
-    const { selectedFile } = get();
-    if (selectedFile?.path === file.path) return;
+      try {
+        const treeResponse = await githubApi.getTree(repo.owner, repo.name, repo.currentBranch);
+        const files = buildFileTree(treeResponse.items);
+        const { expandedIds, selectedFile } = get();
 
-    set({ selectedFile: file });
-    await saveTreeCache(repo, get());
-    await useContentStore.getState().loadContent(repo, file);
-  },
+        let newSelectedFile: FileNode | null = null;
+        if (selectedFile) {
+          newSelectedFile = findNodeByPath(files, selectedFile.path);
+        }
+
+        set({ files, expandedIds, isLoadingTree: false });
+        await setSelectedFileInternal(repo, newSelectedFile);
+      } catch {
+        set({ isLoadingTree: false });
+      }
+    },
+
+    async selectFile(repo, file) {
+      if (file.type === 'dir') return;
+      if (get().selectedFile?.path === file.path) return;
+
+      await setSelectedFileInternal(repo, file);
+    },
 
   async selectFileByPath(repo, path) {
     const node = findNodeByPath(get().files, path);
@@ -210,4 +220,4 @@ export const useFileTreeStore = create<FileTreeStore>((set, get) => ({
     set(initialState);
     useContentStore.getState().clear();
   },
-}));
+};});
