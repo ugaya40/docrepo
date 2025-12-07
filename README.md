@@ -48,7 +48,7 @@ docRepo was developed with the goal of treating GitHub as your document reposito
 
 - **Single HTML Export (Portable & Offline-viewable)**
   - Creates a single, standalone HTML file that works entirely offline. Perfect for sharing via email or chat, similar to a PDF.
-  - **Zero External Dependencies**: Formulas (KaTeX) and diagrams (Mermaid) are pre-rendered to SVG and embedded as base64.
+  - **Zero External Dependencies**: Diagrams (Mermaid) are pre-rendered to SVG, and formulas (KaTeX) include embedded CSS and fonts—no network access required.
   - **Smart Image Embedding**: Images from your GitHub repositories, including private repositories, are automatically embedded.
     - *Limitation*: Some external web images (e.g., badges) cannot be embedded due to browser security restrictions (CORS).
   - **Recommendation**: Store images for shared documents within your repository whenever possible. This helps ensure a fully self-contained HTML export that requires no network access.

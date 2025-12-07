@@ -35,7 +35,16 @@ export const MermaidRenderer: React.FC<MermaidRendererProps> = ({ chart }) => {
       try {
         const id = `mermaid-${Math.random().toString(36).slice(2, 9)}`;
         const { svg } = await mermaid.render(id, chart);
-        setSvg(svg);
+
+        // Preserve original width for horizontal scroll instead of shrinking
+        const maxWidthMatch = svg.match(/style="[^"]*max-width:\s*([^;\"]+)/);
+        const maxWidth = maxWidthMatch ? maxWidthMatch[1].trim() : undefined;
+        let fixedSvg = maxWidth ? svg.replace(/width="100%"/, `width="${maxWidth}"`) : svg;
+
+        // Make SVG inline-block for text-align: center to work
+        fixedSvg = fixedSvg.replace(/(<svg[^>]*style=")/, '$1display: inline-block; ');
+
+        setSvg(fixedSvg);
       } catch (error) {
         console.error('Mermaid render error:', error);
         setSvg(`<pre class="text-red-400 text-xs p-2 border border-red-900 rounded bg-red-950/30">Mermaid Syntax Error</pre>`);
@@ -51,7 +60,7 @@ export const MermaidRenderer: React.FC<MermaidRendererProps> = ({ chart }) => {
 
   return (
     <div
-      className={`flex justify-center my-1 overflow-x-auto p-1 rounded-lg ${isLight ? '' : 'bg-slate-900/50'}`}
+      className={`my-1 overflow-x-auto p-1 pb-3 rounded-lg text-center mermaid-scroll ${isLight ? '' : 'bg-slate-900/50'}`}
       dangerouslySetInnerHTML={{ __html: svg }}
     />
   );

@@ -37,6 +37,25 @@ html, body {
     border-radius: 4px;
   }
 
+  /* Mermaid scrollbar */
+  .mermaid-scroll {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(148, 163, 184, 0.5) transparent;
+  }
+  .mermaid-scroll::-webkit-scrollbar {
+    height: 8px;
+  }
+  .mermaid-scroll::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .mermaid-scroll::-webkit-scrollbar-thumb {
+    background-color: rgba(148, 163, 184, 0.5);
+    border-radius: 4px;
+  }
+  .mermaid-scroll::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(148, 163, 184, 0.7);
+  }
+
   /* Animation */
   @keyframes content-fadeIn {
     from {

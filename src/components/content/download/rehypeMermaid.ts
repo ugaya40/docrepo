@@ -20,7 +20,7 @@ const svgToBase64Img = (svg: string): Element => {
     properties: {
       src: `data:image/svg+xml;base64,${base64}`,
       alt: 'mermaid diagram',
-      style: maxWidth ? `max-width: ${maxWidth}; height: auto;` : 'max-width: 100%; height: auto;',
+      style: maxWidth ? `display: inline-block; max-width: ${maxWidth}; height: auto;` : 'display: inline-block; max-width: 100%; height: auto;',
     },
     children: [],
   };
@@ -67,7 +67,7 @@ export const rehypeMermaid = () => {
           type: 'element',
           tagName: 'div',
           properties: {
-            style: 'display: flex; justify-content: center; margin: 1rem 0; overflow-x: auto; padding: 1rem; border-radius: 0.5rem; background-color: #f8fafc; border: 1px solid #e5e7eb;',
+            style: 'margin: 1rem 0; overflow-x: auto; padding: 1rem; border-radius: 0.5rem; background-color: #f8fafc; border: 1px solid #e5e7eb; text-align: center;',
           },
           children: [imgNode],
         };
