@@ -2,24 +2,18 @@ import { visit } from 'unist-util-visit';
 import type { Root, Element } from 'hast';
 import mermaid from 'mermaid';
 
-mermaid.initialize({
-  startOnLoad: false,
-  theme: 'default',
-  securityLevel: 'loose',
-});
-
 const svgToBase64Img = (svg: string): Element => {
-  // Extract max-width from SVG's inline style
   const maxWidthMatch = svg.match(/style="[^"]*max-width:\s*([^;\"]+)/);
   const maxWidth = maxWidthMatch ? maxWidthMatch[1].trim() : undefined;
 
-  // Replace width="100%" with actual width from viewBox or max-width
   let fixedSvg = svg;
   if (maxWidth) {
     fixedSvg = svg.replace(/width="100%"/, `width="${maxWidth}"`);
   }
 
-  const base64 = btoa(unescape(encodeURIComponent(fixedSvg)));
+  const bytes = new TextEncoder().encode(fixedSvg);
+  const binary = Array.from(bytes, (b) => String.fromCharCode(b)).join('');
+  const base64 = btoa(binary);
   return {
     type: 'element',
     tagName: 'img',
@@ -34,6 +28,13 @@ const svgToBase64Img = (svg: string): Element => {
 
 export const rehypeMermaid = () => {
   return async (tree: Root) => {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: 'default',
+      securityLevel: 'loose',
+      suppressErrorRendering: true
+    });
+
     const nodesToReplace: { parent: Element; index: number; mermaidCode: string }[] = [];
 
     visit(tree, 'element', (node, index, parent) => {

@@ -23,7 +23,8 @@ export const MermaidRenderer: React.FC<MermaidRendererProps> = ({ chart }) => {
         flowchart: {
           htmlLabels: true,
           curve: 'basis',
-        }
+        },
+        suppressErrorRendering: true
       });
       
       try {

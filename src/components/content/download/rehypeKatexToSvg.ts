@@ -19,7 +19,6 @@ const getKatexCss = async (): Promise<string> => {
 
 const renderKatexToSvg = async (katexHtml: string, isBlock: boolean): Promise<string> => {
   const katexCss = await getKatexCss();
-  // Inline: emerald-700 (#047857), Block: slate-900 (#0f172a)
   const color = isBlock ? '#0f172a' : '#047857';
 
   const container = document.createElement('div');
