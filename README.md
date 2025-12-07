@@ -91,8 +91,11 @@ A setup guide for those who want to host their own instance. As a static SPA (Si
 - **State Management**: Zustand (with persistence)
 - **Auth**: Supabase Auth (GitHub OAuth)
 - **API**: Octokit
-- **Markdown Stack**: react-markdown, remark-gfm, remark-math, remark-emoji, rehype-raw, rehype-katex, rehype-highlight
+- **Markdown Stack**: react-markdown, remark-gfm, remark-math, remark-emoji, remark-github-blockquote-alert, rehype-raw, rehype-katex, rehype-highlight
 - **Diagram**: Mermaid.js
+- **Icons**: lucide-react
+- **Toast**: sonner
+- **Cache**: idb-keyval (IndexedDB)
 - **PWA**: vite-plugin-pwa
 
 ### Setup Instructions
@@ -101,7 +104,7 @@ A setup guide for those who want to host their own instance. As a static SPA (Si
 
 ```bash
 git clone https://github.com/ugaya40/docrepo.git
-cd docRepo
+cd docrepo
 npm install
 ```
 
