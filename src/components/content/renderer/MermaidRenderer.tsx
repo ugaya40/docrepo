@@ -31,12 +31,6 @@ export const MermaidRenderer: React.FC<MermaidRendererProps> = ({ chart }) => {
         suppressErrorRendering: true
       });
 
-      const sleep = (ms: number): Promise<void> => {
-        return new Promise(resolve => setTimeout(resolve, ms));
-      };
-
-      await sleep(10000);
-
       try {
         const id = `mermaid-${Math.random().toString(36).slice(2, 9)}`;
         const { svg } = await mermaid.render(id, chart);

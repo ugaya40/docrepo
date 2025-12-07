@@ -1,12 +1,15 @@
 import { useState, useRef, useEffect } from 'react';
 import { MoreVertical, Loader2 } from 'lucide-react';
-import { isMobile } from 'react-device-detect';
+import { isMobile, isIOS } from 'react-device-detect';
 import { useContentStore } from '../../../stores/contentStore';
 import { useFileTreeStore } from '../../../stores/fileTreeStore';
 import { useRepoContextStore } from '../../../stores/repoContextStore';
 import { useThemeStore } from '../../../stores/themeStore';
+import { useHtmlGenerateSession } from '../../../stores/sessions/htmlGenerateSession';
 import { DownloadAsHtmlButton } from './DownloadAsHtmlButton';
 import { ShareAsHtmlButton } from './ShareAsHtmlButton';
+import { ExportAsHtmlButton } from './ExportAsHtmlButton';
+import { ExportModal } from './ExportModal';
 import { PrintButton } from './PrintButton';
 
 export const ShareActions: React.FC = () => {
@@ -15,8 +18,9 @@ export const ShareActions: React.FC = () => {
   const selectedRepo = useRepoContextStore((s) => s.selectedRepo);
   const theme = useThemeStore((s) => s.theme);
   const isLight = theme === 'light';
-  const [isGenerating, setIsGenerating] = useState(false);
+  const { state: htmlState } = useHtmlGenerateSession();
   const [showMenu, setShowMenu] = useState(false);
+  const [showExportModal, setShowExportModal] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -35,27 +39,45 @@ export const ShareActions: React.FC = () => {
     <div className="relative" ref={menuRef}>
       <button
         onClick={() => setShowMenu(!showMenu)}
-        disabled={isGenerating}
-        className={`p-2 rounded-lg transition-all ${isGenerating ? 'text-indigo-400 cursor-wait' : ''} ${isLight ? 'text-slate-500 hover:text-indigo-500 hover:bg-slate-200' : 'text-slate-400 hover:text-indigo-400 hover:bg-slate-800'}`}
+        disabled={htmlState.isGenerating}
+        className={`p-2 rounded-lg transition-all ${htmlState.isGenerating ? 'text-indigo-400 cursor-wait' : ''} ${isLight ? 'text-slate-500 hover:text-indigo-500 hover:bg-slate-200' : 'text-slate-400 hover:text-indigo-400 hover:bg-slate-800'}`}
         title="Download & Print"
       >
-        {isGenerating ? <Loader2 size={18} className="animate-spin" /> : <MoreVertical size={18} />}
+        {htmlState.isGenerating ? <Loader2 size={18} className="animate-spin" /> : <MoreVertical size={18} />}
       </button>
 
       {showMenu && (
         <div className={`absolute right-0 top-full mt-1 border rounded-lg shadow-xl z-20 min-w-48 [&>*:first-child]:rounded-t-lg [&>*:last-child]:rounded-b-lg ${isLight ? 'bg-white border-slate-300' : 'bg-slate-800 border-slate-700'}`}>
-          <DownloadAsHtmlButton
-            onDownloadStart={() => { setIsGenerating(true); setShowMenu(false); }}
-            onDownloadEnd={() => setIsGenerating(false)}
-          />
-          {isMobile && (
-            <ShareAsHtmlButton
-              onShareStart={() => { setIsGenerating(true); setShowMenu(false); }}
-              onShareEnd={() => setIsGenerating(false)}
+          {isIOS ? (
+            <ExportAsHtmlButton
+              onExportStart={() => setShowMenu(false)}
+              onExportComplete={() => setShowExportModal(true)}
             />
+          ) : (
+            <>
+              <DownloadAsHtmlButton
+                onDownloadStart={() => setShowMenu(false)}
+                onDownloadEnd={() => {}}
+              />
+              {isMobile && (
+                <ShareAsHtmlButton
+                  onShareStart={() => setShowMenu(false)}
+                  onShareEnd={() => {}}
+                />
+              )}
+            </>
           )}
           <PrintButton />
         </div>
+      )}
+
+      {showExportModal && htmlState.result && (
+        <ExportModal
+          result={htmlState.result}
+          onDownload={() => setShowExportModal(false)}
+          onShare={() => setShowExportModal(false)}
+          onClose={() => setShowExportModal(false)}
+        />
       )}
     </div>
   );

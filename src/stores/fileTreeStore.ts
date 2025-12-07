@@ -4,6 +4,7 @@ import { githubApi, type GitTreeItem } from '../lib/github';
 import { cacheService } from '../services/cacheService';
 import { useContentStore } from './contentStore';
 import { contentRenderSession } from './sessions/contentRenderSession';
+import { htmlGenerateSession } from './sessions/htmlGenerateSession';
 
 type FileTreeState = {
   files: FileNode[];
@@ -95,6 +96,7 @@ export const useFileTreeStore = create<FileTreeStore>((set, get) => {
     const current = get().selectedFile;
     if (current?.path !== newFile?.path) {
       contentRenderSession.nextSession();
+      htmlGenerateSession.nextSession();
     }
     set({ selectedFile: newFile });
 
