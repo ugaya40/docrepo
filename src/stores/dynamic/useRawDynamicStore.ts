@@ -2,7 +2,8 @@ import { create } from 'zustand';
 
 type DynamicState = {
   states: Map<string, unknown>;
-  set: <T>(name: string, valueOrUpdater: T | ((prev: T | undefined) => T)) => void;
+  init: <T>(name: string, initialValue: T) => void;
+  set: <T>(name: string, valueOrUpdater: T | ((prev: T) => T)) => void;
   get: <T>(name: string) => T | undefined;
   remove: (name: string) => void;
   has: (name: string) => boolean;
@@ -11,8 +12,17 @@ type DynamicState = {
 export const useRawDynamicStore = create<DynamicState>((set, get) => ({
   states: new Map(),
 
+  init: (name, initialValue) => {
+    set((state) => {
+      const newStates = new Map(state.states);
+      newStates.set(name, initialValue);
+      return { states: newStates };
+    });
+  },
+
   set: (name, valueOrUpdater) => {
     set((state) => {
+      if (!state.states.has(name)) return state;
       const newStates = new Map(state.states);
       if (typeof valueOrUpdater === 'function') {
         const prev = state.states.get(name);

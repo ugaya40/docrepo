@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { useContentRenderSessionStore } from './sequences/contentRenderSession';
+import { contentRenderSession } from './sessions/contentRenderSession';
 
 type Theme = 'light' | 'dark';
 
@@ -15,12 +15,12 @@ export const useThemeStore = create<ThemeStore>()(
     (set, get) => ({
       theme: 'dark',
       toggleTheme: () => {
-        useContentRenderSessionStore.getState().nextSession();
+        contentRenderSession.nextSession();
         set((state) => ({ theme: state.theme === 'dark' ? 'light' : 'dark' }));
       },
       setTheme: (theme) => {
         if (get().theme !== theme) {
-          useContentRenderSessionStore.getState().nextSession();
+          contentRenderSession.nextSession();
         }
         set({ theme });
       },

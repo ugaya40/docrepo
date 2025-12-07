@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
 import mermaid from 'mermaid';
 import { useThemeStore } from '../../../stores/themeStore';
-import { useDynamicState } from '../../../stores/dynamic/useDynamicState';
-import { useContentRenderSessionStore, type ContentRenderSessionState } from '../../../stores/sequences/contentRenderSession';
+import { contentRenderSession } from '../../../stores/sessions/contentRenderSession';
 
 interface MermaidRendererProps {
   chart: string;
@@ -11,14 +10,14 @@ interface MermaidRendererProps {
 export const MermaidRenderer: React.FC<MermaidRendererProps> = ({ chart }) => {
   const [svg, setSvg] = useState<string>('');
   const theme = useThemeStore((s) => s.theme);
-  const sessionKey = useContentRenderSessionStore((s) => s.getSessionKey());
-  const [, setSessionState] = useDynamicState<ContentRenderSessionState>(sessionKey);
 
   useEffect(() => {
     const renderChart = async () => {
       if (!chart) return;
 
-      setSessionState(prev => ({ ...prev, pendingRenderCount: prev.pendingRenderCount + 1 }));
+      const sessionOperation = contentRenderSession.getContext();
+
+      sessionOperation.incrementPendingRender();
       setSvg('');
 
       mermaid.initialize({
@@ -31,6 +30,12 @@ export const MermaidRenderer: React.FC<MermaidRendererProps> = ({ chart }) => {
         },
         suppressErrorRendering: true
       });
+
+      const sleep = (ms: number): Promise<void> => {
+        return new Promise(resolve => setTimeout(resolve, ms));
+      };
+
+      await sleep(10000);
 
       try {
         const id = `mermaid-${Math.random().toString(36).slice(2, 9)}`;
@@ -49,7 +54,7 @@ export const MermaidRenderer: React.FC<MermaidRendererProps> = ({ chart }) => {
         console.error('Mermaid render error:', error);
         setSvg(`<pre class="text-red-400 text-xs p-2 border border-red-900 rounded bg-red-950/30">Mermaid Syntax Error</pre>`);
       } finally {
-        setSessionState(prev => ({ ...prev, pendingRenderCount: Math.max(0, prev.pendingRenderCount - 1) }));
+        sessionOperation.decrementPendingRender();
       }
     };
 

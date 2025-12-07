@@ -1,7 +1,6 @@
 import { Loader2, Printer } from 'lucide-react';
 import { useThemeStore } from '../../../stores/themeStore';
-import { useDynamicState } from '../../../stores/dynamic/useDynamicState';
-import { useContentRenderSessionStore, type ContentRenderSessionState } from '../../../stores/sequences/contentRenderSession';
+import { useContentRenderSession } from '../../../stores/sessions/contentRenderSession';
 
 type MainButtonProps = {
   disabled?: boolean;
@@ -24,8 +23,7 @@ const MainButton: React.FC<MainButtonProps> = ({ disabled, isLight, label, onCli
 export const PrintButton: React.FC = () => {
   const theme = useThemeStore((s) => s.theme);
   const isLight = theme === 'light';
-  const sessionKey = useContentRenderSessionStore((s) => s.getSessionKey());
-  const [sessionState] = useDynamicState<ContentRenderSessionState>(sessionKey);
+  const { state: sessionState } = useContentRenderSession();
   const isPrintReady = !isLight || sessionState.pendingRenderCount === 0;
 
   const handlePrint = () => {

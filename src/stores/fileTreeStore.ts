@@ -3,7 +3,7 @@ import type { Repo, FileNode } from '../types';
 import { githubApi, type GitTreeItem } from '../lib/github';
 import { cacheService } from '../services/cacheService';
 import { useContentStore } from './contentStore';
-import { useContentRenderSessionStore } from './sequences/contentRenderSession';
+import { contentRenderSession } from './sessions/contentRenderSession';
 
 type FileTreeState = {
   files: FileNode[];
@@ -94,7 +94,7 @@ export const useFileTreeStore = create<FileTreeStore>((set, get) => {
   ) => {
     const current = get().selectedFile;
     if (current?.path !== newFile?.path) {
-      useContentRenderSessionStore.getState().nextSession();
+      contentRenderSession.nextSession();
     }
     set({ selectedFile: newFile });
 

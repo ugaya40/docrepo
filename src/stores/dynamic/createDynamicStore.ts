@@ -5,5 +5,5 @@ export const createDynamicStore = <T>(key: string, initialValue: T) => {
   if (state.states.has(key)) {
     throw new Error(`Dynamic store "${key}" already exists.`);
   }
-  state.set(key, initialValue);
+  state.init(key, initialValue);
 };

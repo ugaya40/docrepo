@@ -1,19 +1,15 @@
 import { useRawDynamicStore } from "./useRawDynamicStore";
 
 export const useDynamicState = <T>(key: string) => {
-const has = useRawDynamicStore((s) => s.states.has(key));
+  const has = useRawDynamicStore((s) => s.states.has(key));
   if (!has) {
     throw new Error(`Dynamic state "${key}" is not defined. Use useDefineDynamicState to define it first.`);
   }
 
   const value = useRawDynamicStore((s) => s.states.get(key) as T);
-  const setStore = useRawDynamicStore((s) => s.set);
 
   const setValue = (valueOrUpdater: T | ((prev: T) => T)) => {
-    if (!useRawDynamicStore.getState().states.has(key)) {
-      return;
-    }
-    setStore(key, valueOrUpdater as T | ((prev: T | undefined) => T));
+    useRawDynamicStore.getState().set(key, valueOrUpdater);
   };
 
   return [value, setValue] as const;
