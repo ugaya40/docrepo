@@ -1,3 +1,5 @@
+import { katexEmbeddedCss } from './katexEmbeddedCss';
+
 const exportCss = `
 /* Reset & Base */
 *, *::before, *::after { box-sizing: border-box; }
@@ -204,6 +206,10 @@ hr {
 .hljs-addition { color: #059669; background-color: #dcfce7; }
 .hljs-deletion { color: #dc2626; background-color: #fee2e2; }
 
+/* KaTeX Colors */
+.katex-display .katex { color: #0f172a; }
+.katex:not(.katex-display .katex) { color: #047857; }
+
 /* Print Styles */
 @media print {
   body { background: white; }
@@ -222,6 +228,13 @@ export const createHtmlDocument = (title: string, content: string): string => {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${title}</title>
+  <!--
+  KaTeX - The fastest math typesetting library for the web
+  Copyright (c) 2013-2020 Khan Academy and other contributors
+  Licensed under the MIT License
+  https://github.com/KaTeX/KaTeX
+  -->
+  <style>${katexEmbeddedCss}</style>
   <style>${exportCss}</style>
 </head>
 <body class="markdown-body">

@@ -15,7 +15,6 @@ import { useFileTreeStore } from '../../../stores/fileTreeStore';
 import { useRepoContextStore } from '../../../stores/repoContextStore';
 import { rehypeEmbedImages } from '../download/rehypeEmbedImages';
 import { rehypeMermaid } from '../download/rehypeMermaid';
-import { rehypeKatexToSvg } from '../download/rehypeKatexToSvg';
 import { createHtmlDocument } from '../download/htmlTemplate';
 
 type GenerateResult = {
@@ -45,7 +44,6 @@ export const useGenerateHtml = () => {
         .use(rehypeRaw)
         .use(rehypeMermaid)
         .use(rehypeKatex)
-        .use(rehypeKatexToSvg)
         .use(rehypeHighlight)
         .use(rehypeEmbedImages, {
           filePath: selectedFile.path,
