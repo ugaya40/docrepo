@@ -7,6 +7,8 @@ A web application (PWA) for comfortably viewing and sharing Markdown files on Gi
 
 Designed for users who treat GitHub as the single source of truth for their documents. It enables you to securely view and share materials with complex math formulas and Mermaid diagrams on the go.
 
+A key feature is the ability to export documents as a single, self-contained HTML file. It bundles your Markdown content, math formulas (KaTeX), diagrams (Mermaid), and images into an offline-viewable document that you can share via email or chat without requiring the recipient to have GitHub access.
+
 Completely read-only, displaying only .md files. (The tree is displayed with Compact Folders for better navigation)
 
 ![docRepo Main Screen](screenshots/main-dark.png)
