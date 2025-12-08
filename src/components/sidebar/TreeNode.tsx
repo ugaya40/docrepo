@@ -10,6 +10,7 @@ export interface TreeNodeProps {
   expandedPaths: Set<string>;
   toggleFolder: (path: string) => void;
   isLight?: boolean;
+  onKeyDown: (node: FileNode, e: React.KeyboardEvent) => void;
 }
 
 export const TreeNode: React.FC<TreeNodeProps> = ({
@@ -20,6 +21,7 @@ export const TreeNode: React.FC<TreeNodeProps> = ({
   expandedPaths,
   toggleFolder,
   isLight,
+  onKeyDown,
 }) => {
   const isExpanded = expandedPaths.has(node.path);
   const isSelected = selectedPath === node.path;
@@ -45,12 +47,17 @@ export const TreeNode: React.FC<TreeNodeProps> = ({
   return (
     <div className="select-none w-full">
       <div
+        role="treeitem"
+        tabIndex={0}
+        aria-expanded={node.type === 'dir' ? isExpanded : undefined}
+        aria-selected={isSelected}
         className={`
-          flex items-center py-2 pr-4 cursor-pointer text-sm transition-colors duration-200
+          flex items-center py-2 pr-4 cursor-pointer text-sm transition-colors duration-200 outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-inset
           ${isSelected ? selectedClass : defaultClass}
         `}
         style={{ paddingLeft }}
         onClick={handleClick}
+        onKeyDown={(e) => onKeyDown(node, e)}
         data-path={node.path}
       >
         <span className="mr-2 opacity-70">
@@ -66,7 +73,7 @@ export const TreeNode: React.FC<TreeNodeProps> = ({
       </div>
 
       {node.type === 'dir' && isExpanded && children.length > 0 && (
-        <div className="w-full">
+        <div role="group" className="w-full">
           {children.map(child => (
             <TreeNode
               key={child.path}
@@ -77,6 +84,7 @@ export const TreeNode: React.FC<TreeNodeProps> = ({
               expandedPaths={expandedPaths}
               toggleFolder={toggleFolder}
               isLight={isLight}
+              onKeyDown={onKeyDown}
             />
           ))}
         </div>

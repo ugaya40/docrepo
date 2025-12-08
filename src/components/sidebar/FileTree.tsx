@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useCallback } from 'react';
 import { RefreshCw, FolderOpen } from 'lucide-react';
 import type { FileNode } from '../../types';
 import { useRepoContextStore } from '../../stores/repoContextStore';
@@ -25,23 +25,49 @@ const filterMarkdownTree = (nodes: FileNode[]): FileNode[] => {
     .filter((node): node is FileNode => node !== null);
 };
 
-const compactFolders = (nodes: FileNode[]): FileNode[] => {
-  return nodes.map((node) => {
-    if (node.type !== 'dir' || !node.children) return node;
+type CompactResult = {
+  nodes: FileNode[];
+  parentMap: Map<string, { parent: FileNode | null; siblings: FileNode[]; index: number }>;
+};
 
-    const compactedChildren = compactFolders(node.children);
+const compactFolders = (
+  nodes: FileNode[],
+  parent: FileNode | null = null,
+  parentMap: Map<string, { parent: FileNode | null; siblings: FileNode[]; index: number }> = new Map()
+): CompactResult => {
+  const resultNodes: FileNode[] = [];
+
+  for (let i = 0; i < nodes.length; i++) {
+    const node = nodes[i];
+
+    if (node.type !== 'dir' || !node.children) {
+      resultNodes.push(node);
+      continue;
+    }
+
+    const { nodes: compactedChildren } = compactFolders(node.children, node, parentMap);
 
     if (compactedChildren.length === 1 && compactedChildren[0].type === 'dir') {
       const child = compactedChildren[0];
-      return {
+      const merged: FileNode = {
         ...child,
         name: `${node.name}/${child.name}`,
         children: child.children,
       };
+      // 子のparentMap情報を更新（マージされたノードのparentは現在のparent）
+      parentMap.delete(child.path);
+      resultNodes.push(merged);
+    } else {
+      resultNodes.push({ ...node, children: compactedChildren });
     }
+  }
 
-    return { ...node, children: compactedChildren };
-  });
+  // 最終的なresultNodesでparentMapを設定
+  for (let i = 0; i < resultNodes.length; i++) {
+    parentMap.set(resultNodes[i].path, { parent, siblings: resultNodes, index: i });
+  }
+
+  return { nodes: resultNodes, parentMap };
 };
 
 export const FileTree: React.FC = () => {
@@ -55,9 +81,10 @@ export const FileTree: React.FC = () => {
   const theme = useThemeStore((s) => s.theme);
   const isLight = theme === 'light';
 
-  const processedFiles = useMemo(() => {
+  const { processedFiles, parentMap } = useMemo(() => {
     const filtered = filterMarkdownTree(files);
-    return compactFolders(filtered);
+    const { nodes, parentMap } = compactFolders(filtered);
+    return { processedFiles: nodes, parentMap };
   }, [files]);
 
   const handleSelectFile = (file: FileNode) => {
@@ -80,6 +107,102 @@ export const FileTree: React.FC = () => {
       refreshTree(selectedRepo, true);
     }
   };
+
+  const focusNode = useCallback((path: string) => {
+    const el = document.querySelector(`[data-path="${CSS.escape(path)}"]`) as HTMLElement | null;
+    el?.focus();
+  }, []);
+
+  const getLastVisibleDescendant = useCallback((node: FileNode): FileNode => {
+    if (node.type === 'dir' && expandedIds.has(node.path) && node.children?.length) {
+      return getLastVisibleDescendant(node.children[node.children.length - 1]);
+    }
+    return node;
+  }, [expandedIds]);
+
+  const handleKeyDown = useCallback((node: FileNode, e: React.KeyboardEvent) => {
+    const entry = parentMap.get(node.path);
+    if (!entry) return;
+
+    const { parent, siblings, index } = entry;
+
+    switch (e.key) {
+      case 'ArrowDown': {
+        e.preventDefault();
+        if (node.type === 'dir' && expandedIds.has(node.path) && node.children?.length) {
+          focusNode(node.children[0].path);
+        } else if (index < siblings.length - 1) {
+          focusNode(siblings[index + 1].path);
+        } else if (parent) {
+          let currentEntry = parentMap.get(parent.path);
+          while (currentEntry) {
+            if (currentEntry.index < currentEntry.siblings.length - 1) {
+              focusNode(currentEntry.siblings[currentEntry.index + 1].path);
+              break;
+            }
+            if (!currentEntry.parent) break;
+            currentEntry = parentMap.get(currentEntry.parent.path);
+          }
+        }
+        break;
+      }
+      case 'ArrowUp': {
+        e.preventDefault();
+        if (index > 0) {
+          const prevSibling = siblings[index - 1];
+          focusNode(getLastVisibleDescendant(prevSibling).path);
+        } else if (parent) {
+          focusNode(parent.path);
+        }
+        break;
+      }
+      case 'ArrowRight': {
+        e.preventDefault();
+        if (node.type === 'dir') {
+          if (!expandedIds.has(node.path)) {
+            handleToggleFolder(node.path);
+          } else if (node.children?.length) {
+            focusNode(node.children[0].path);
+          }
+        }
+        break;
+      }
+      case 'ArrowLeft': {
+        e.preventDefault();
+        if (node.type === 'dir' && expandedIds.has(node.path)) {
+          handleToggleFolder(node.path);
+        } else if (parent) {
+          focusNode(parent.path);
+        }
+        break;
+      }
+      case 'Enter':
+      case ' ': {
+        e.preventDefault();
+        if (node.type === 'dir') {
+          handleToggleFolder(node.path);
+        } else {
+          handleSelectFile(node);
+        }
+        break;
+      }
+      case 'Home': {
+        e.preventDefault();
+        if (processedFiles.length > 0) {
+          focusNode(processedFiles[0].path);
+        }
+        break;
+      }
+      case 'End': {
+        e.preventDefault();
+        if (processedFiles.length > 0) {
+          const lastRoot = processedFiles[processedFiles.length - 1];
+          focusNode(getLastVisibleDescendant(lastRoot).path);
+        }
+        break;
+      }
+    }
+  }, [expandedIds, processedFiles]);
 
   return (
     <div className="flex-1 overflow-auto py-2 custom-scrollbar">
@@ -111,7 +234,7 @@ export const FileTree: React.FC = () => {
             <p className="text-sm">No markdown files found</p>
           </div>
         ) : (
-          <div className="inline-block min-w-full">
+          <div role="tree" aria-label="File tree" className="inline-block min-w-full">
             {processedFiles.map((node) => (
               <TreeNode
                 key={node.path}
@@ -122,6 +245,7 @@ export const FileTree: React.FC = () => {
                 expandedPaths={expandedIds}
                 toggleFolder={handleToggleFolder}
                 isLight={isLight}
+                onKeyDown={handleKeyDown}
               />
             ))}
           </div>
