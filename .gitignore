@@ -13,7 +13,7 @@ dist-ssr
 *.local
 
 # Generated files
-src/components/content/download/katexEmbeddedCss.ts
+src/generated/
 
 # Editor directories and files
 .vscode/*

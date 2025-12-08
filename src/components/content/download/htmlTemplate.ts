@@ -1,4 +1,4 @@
-import { katexEmbeddedCss } from './katexEmbeddedCss';
+import { katexEmbeddedCss } from '../../../generated/katexEmbeddedCss';
 
 const exportCss = `
 /* Reset & Base */

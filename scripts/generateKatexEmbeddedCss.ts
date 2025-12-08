@@ -8,7 +8,7 @@ const rootDir = resolve(__dirname, '..');
 const katexDistDir = resolve(rootDir, 'node_modules/katex/dist');
 const cssPath = resolve(katexDistDir, 'katex.min.css');
 const fontsDir = resolve(katexDistDir, 'fonts');
-const outputPath = resolve(rootDir, 'src/components/content/download/katexEmbeddedCss.ts');
+const outputPath = resolve(rootDir, 'src/generated/katexEmbeddedCss.ts');
 
 const css = readFileSync(cssPath, 'utf-8');
 
