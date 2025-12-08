@@ -13,6 +13,23 @@ html, body {
     scroll-margin-top: 60px;
   }
 
+  .prose :is(h1, h2) {
+    border-bottom: 1px solid color-mix(in srgb, currentColor 20%, transparent);
+    padding-bottom: 0.3em;
+  }
+
+  .prose h1 {
+    margin-bottom: 16px !important;
+  }
+
+  .prose p {
+    margin-top: 0 !important;
+  }
+
+  .prose img {
+    margin: 0 !important;
+  }
+
   /* KaTeX - shared */
   .katex-display {
     @apply my-6 py-4 px-6 overflow-x-auto;

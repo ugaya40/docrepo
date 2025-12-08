@@ -4,6 +4,7 @@ import { useRepoContextStore } from "../../../stores/repoContextStore";
 import { useFileTreeStore } from "../../../stores/fileTreeStore";
 import { githubApi } from "../../../lib/github";
 import { resolvePath } from "./resolvePath";
+import type { ExtraProps } from "react-markdown";
 
 const getMimeType = (filename: string): string => {
   const ext = filename.split('.').pop()?.toLowerCase();
@@ -31,8 +32,8 @@ const setImageCache = async (sha: string, cache: CachedImage) => {
   await idbSet(`image:${sha}`, cache);
 };
 
-export const ImageRenderer = (props: React.ImgHTMLAttributes<HTMLImageElement>) => {
-  const { src, alt } = props;
+export const ImageRenderer = (props: React.ComponentProps<'img'> & ExtraProps) => {
+  const { src, node, ...otherProps } = props;
   const [imgSrc, setImgSrc] = useState<string | undefined>(undefined);
   const [loading, setLoading] = useState(true);
   const objectUrlRef = useRef<string | null>(null);
@@ -118,7 +119,7 @@ export const ImageRenderer = (props: React.ImgHTMLAttributes<HTMLImageElement>) 
 
   if (loading) {
     return (
-      <span className="block w-full h-48 bg-slate-800/50 animate-pulse rounded-lg my-4 items-center justify-center text-slate-600 text-sm">
+      <span className="!inline-block bg-slate-800/50 animate-pulse rounded text-slate-600 text-sm">
         Loading image...
       </span>
     );
@@ -127,8 +128,8 @@ export const ImageRenderer = (props: React.ImgHTMLAttributes<HTMLImageElement>) 
   return (
     <img
       src={imgSrc || ''}
-      alt={alt}
-      className="max-w-full h-auto rounded-lg my-4 border border-slate-800 bg-slate-900"
+      {...otherProps}
+      className="!inline max-w-full h-auto"
     />
   );
 };

@@ -165,7 +165,10 @@ GitHub-style shortcodes are converted to emojis.
 ### Images
 Displays images using relative paths within the repository (only shown if the file exists).
 
-Test for `![Logo](../public/pwa-192x192.png)`:
+**Inline display:** Logo ![Logo](../public/pwa-192x192.png) is displayed inline with text.
+
+**Block display:**
+
 ![Logo](../public/pwa-192x192.png)
 
 External image test:

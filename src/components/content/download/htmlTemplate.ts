@@ -146,7 +146,7 @@ thead th { padding-bottom: 0.5714em; }
 tbody tr:last-child td { border-bottom: none; }
 
 /* Images */
-img { display: block; max-width: 100%; height: auto; margin: 1em 0; }
+img { display: inline; max-width: 100%; height: auto; }
 
 /* Horizontal Rule */
 hr {
