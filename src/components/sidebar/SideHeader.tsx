@@ -4,7 +4,7 @@ import { useRepoContextStore } from '../../stores/repoContextStore';
 import { useLayoutStore } from '../../stores/layoutStore';
 import { useThemeStore } from '../../stores/themeStore';
 
-export const RepoSelector: React.FC = () => {
+export const SideHeader: React.FC = () => {
   const repos = useRepoContextStore((s) => s.repos);
   const branches = useRepoContextStore((s) => s.branches);
   const selectedRepo = useRepoContextStore((s) => s.selectedRepo);
@@ -17,7 +17,7 @@ export const RepoSelector: React.FC = () => {
 
   useEffect(() => {
     loadRepos();
-  }, [loadRepos]);
+  }, []);
 
   useEffect(() => {
     if (selectedRepo) {
@@ -65,6 +65,7 @@ export const RepoSelector: React.FC = () => {
           ) : (
             <>
               <select
+                aria-label="Select repository"
                 className={`w-full border text-sm rounded-lg p-2 focus:ring-indigo-500 focus:border-indigo-500 appearance-none cursor-pointer transition-colors ${isLight ? 'bg-white border-slate-300 text-slate-700 hover:bg-slate-100' : 'bg-slate-950 border-slate-700 text-slate-200 hover:bg-slate-800'}`}
                 value={selectedRepo?.name || ''}
                 onChange={(e) => {
@@ -105,6 +106,7 @@ export const RepoSelector: React.FC = () => {
             ) : (
               <>
                 <select
+                  aria-label="Select branch"
                   className={`w-full border text-sm rounded-lg p-2 focus:ring-indigo-500 focus:border-indigo-500 appearance-none cursor-pointer transition-colors ${isLight ? 'bg-white border-slate-300 text-slate-700 hover:bg-slate-100' : 'bg-slate-950 border-slate-700 text-slate-200 hover:bg-slate-800'}`}
                   value={selectedRepo.currentBranch}
                   onChange={(e) => selectBranch(e.target.value)}

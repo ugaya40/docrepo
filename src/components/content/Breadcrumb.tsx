@@ -22,7 +22,7 @@ export const Breadcrumb: React.FC = () => {
     }
     openSidebar();
     requestAnimationFrame(() => {
-      const el = document.querySelector(`[data-path="${selectedFile.path}"]`);
+      const el = document.querySelector(`[data-path="${CSS.escape(selectedFile.path)}"]`);
       el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     });
   };

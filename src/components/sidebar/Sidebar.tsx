@@ -1,7 +1,7 @@
 import { memo } from 'react';
 import { useLayoutStore } from '../../stores/layoutStore';
 import { useThemeStore } from '../../stores/themeStore';
-import { RepoSelector } from './RepoSelector';
+import { SideHeader } from './SideHeader';
 import { FileTree } from './FileTree';
 import { RateLimitIndicator } from './RateLimitIndicator';
 import { UserProfile } from './UserProfile';
@@ -19,10 +19,12 @@ export const Sidebar: React.FC = memo(() => {
         ${theme === 'light' ? 'bg-(--color-bg-secondary) border-(--color-border)' : 'bg-slate-900 border-slate-800'}
       `}
     >
-      <RepoSelector />
+      <SideHeader />
       <FileTree />
       <RateLimitIndicator />
       <UserProfile />
     </aside>
   );
 });
+
+Sidebar.displayName = 'Sidebar';

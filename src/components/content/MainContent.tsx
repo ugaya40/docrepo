@@ -60,3 +60,5 @@ export const MainContent: React.FC = memo(() => {
     </main>
   );
 });
+
+MainContent.displayName = 'MainContent';
