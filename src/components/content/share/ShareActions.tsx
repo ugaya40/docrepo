@@ -40,6 +40,7 @@ export const ShareActions: React.FC = () => {
       <button
         onClick={() => setShowMenu(!showMenu)}
         disabled={htmlState.isGenerating}
+        aria-label="Export and print options"
         className={`p-2 rounded-lg transition-all ${htmlState.isGenerating ? 'text-indigo-400 cursor-wait' : ''} ${isLight ? 'text-slate-500 hover:text-indigo-500 hover:bg-slate-200' : 'text-slate-400 hover:text-indigo-400 hover:bg-slate-800'}`}
         title="Download & Print"
       >

@@ -41,6 +41,7 @@ export const Header: React.FC = () => {
         <div className="flex items-center gap-3 overflow-hidden">
           <button
             onClick={toggleSidebar}
+            aria-label="Toggle sidebar"
             className={`p-2 rounded-lg transition-colors ${isLight ? 'text-slate-500 hover:text-slate-700 hover:bg-slate-200' : 'text-slate-400 hover:text-white hover:bg-slate-800'}`}
           >
             <Menu size={20} />
@@ -80,6 +81,7 @@ export const Header: React.FC = () => {
               <ShareActions />
               <button
                 onClick={handleRefreshContent}
+                aria-label="Refresh content"
                 className={`p-2 rounded-lg transition-all ${(isLoadingContent || isLoadingTree) ? 'animate-spin text-indigo-400' : ''} ${isLight ? 'text-slate-500 hover:text-indigo-500 hover:bg-slate-200' : 'text-slate-400 hover:text-indigo-400 hover:bg-slate-800'}`}
                 title="Refresh Content"
               >
@@ -105,6 +107,7 @@ export const Header: React.FC = () => {
             <ShareActions />
             <button
               onClick={handleRefreshContent}
+              aria-label="Refresh content"
               className={`p-1 rounded transition-all ${(isLoadingContent || isLoadingTree) ? 'animate-spin text-indigo-400' : ''} ${isLight ? 'text-slate-500 hover:text-indigo-500 hover:bg-slate-200' : 'text-slate-400 hover:text-indigo-400 hover:bg-slate-800'}`}
               title="Refresh Content"
             >

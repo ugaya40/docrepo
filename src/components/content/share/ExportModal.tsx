@@ -53,6 +53,7 @@ export const ExportModal: React.FC<ExportModalProps> = ({
       >
         <button
           onClick={onClose}
+          aria-label="Close modal"
           className={`absolute top-3 right-3 p-1 rounded transition-colors ${isLight ? 'text-slate-400 hover:text-slate-600 hover:bg-slate-100' : 'text-slate-500 hover:text-slate-300 hover:bg-slate-700'}`}
         >
           <X size={16} />

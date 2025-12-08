@@ -46,6 +46,7 @@ export const UserProfile: React.FC = () => {
         </div>
         <button
           onClick={() => setShowSettings(true)}
+          aria-label="Settings"
           className={`p-2 rounded-lg transition-colors ${isLight ? 'text-slate-500 hover:text-slate-700 hover:bg-slate-200' : 'text-slate-400 hover:text-white hover:bg-slate-800'}`}
           title="Settings"
         >
@@ -53,6 +54,7 @@ export const UserProfile: React.FC = () => {
         </button>
         <button
           onClick={logout}
+          aria-label="Logout"
           className={`p-2 rounded-lg transition-colors ${isLight ? 'text-slate-500 hover:text-red-500 hover:bg-slate-200' : 'text-slate-400 hover:text-red-400 hover:bg-slate-800'}`}
           title="Logout"
         >
@@ -80,6 +82,7 @@ export const UserProfile: React.FC = () => {
                     setShowSettings(false);
                     setConfirmClear(false);
                   }}
+                  aria-label="Close settings"
                   className={`p-1 rounded transition-colors ${isLight ? 'text-slate-500 hover:text-slate-700 hover:bg-slate-100' : 'text-slate-400 hover:text-white hover:bg-slate-800'}`}
                 >
                   <X size={16} />
