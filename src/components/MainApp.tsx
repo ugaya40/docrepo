@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
 import { useLayoutStore } from '../stores/layoutStore';
 import { useRepoContextStore } from '../stores/repoContextStore';
-import { useFileTreeStore } from '../stores/fileTreeStore';
 import { useThemeStore } from '../stores/themeStore';
 import { MOBILE_BREAKPOINT } from '../lib/constants';
 import { Sidebar } from './sidebar/Sidebar';
@@ -14,45 +13,12 @@ export const MainApp: React.FC = () => {
   const theme = useThemeStore((s) => s.theme);
 
   const repos = useRepoContextStore((s) => s.repos);
-  const restore = useRepoContextStore.getState().restore;
-  const { loadBranches, selectRepo } = useRepoContextStore.getState();
-  const { refreshTree, selectFileByPath } = useFileTreeStore.getState();
 
   useHistorySync();
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    const repoParam = params.get('repo');
-    const branchParam = params.get('branch');
-    const pathParam = params.get('path');
-    const hasDeepLink = repoParam && branchParam && pathParam;
-
-    if (repos.length === 0) {
-      if (!hasDeepLink) {
-        restore().then(() => {
-          const selectedRepo = useRepoContextStore.getState().selectedRepo;
-          if (selectedRepo) {
-            refreshTree(selectedRepo, false);
-            loadBranches();
-          }
-        });
-      }
-      return;
-    }
-
-    if (hasDeepLink) {
-      const targetRepo = repos.find((r) => r.fullName === repoParam);
-      if (targetRepo) {
-        const repoWithBranch = { ...targetRepo, currentBranch: branchParam };
-        selectRepo(repoWithBranch, { restoreLastBranch: false }).then(() => {
-          loadBranches();
-          const selectedRepo = useRepoContextStore.getState().selectedRepo;
-          if (selectedRepo) {
-            selectFileByPath(selectedRepo, pathParam);
-          }
-        });
-      }
-    }
+    useRepoContextStore.getState().initializeApp(params);
   }, [repos]);
 
   useEffect(() => {

@@ -23,6 +23,7 @@ type RepoContextActions = {
   selectRepo: (repo: Repo, options?: SelectRepoOptions) => Promise<void>;
   selectBranch: (branch: string) => Promise<void>;
   reset: () => void;
+  initializeApp: (searchParams: URLSearchParams) => Promise<void>;
 };
 
 export type RepoContextStore = RepoContextState & RepoContextActions;
@@ -130,5 +131,41 @@ export const useRepoContextStore = create<RepoContextStore>((set, get) => ({
   reset() {
     set(initialState);
     useFileTreeStore.getState().clear();
+  },
+
+  async initializeApp(params: URLSearchParams) {
+    const repoParam = params.get('repo');
+    const branchParam = params.get('branch');
+    const pathParam = params.get('path');
+    const hasDeepLink = repoParam && branchParam && pathParam;
+
+    const { repos } = get();
+
+    if (repos.length === 0) {
+      if (!hasDeepLink) {
+        await get().restore();
+        const selectedRepo = get().selectedRepo;
+        if (selectedRepo) {
+          useFileTreeStore.getState().refreshTree(selectedRepo, false);
+          await get().loadBranches();
+        }
+      }
+      return;
+    }
+
+    if (hasDeepLink) {
+      const targetRepo = repos.find((r) => r.fullName === repoParam);
+      if (targetRepo) {
+        const repoWithBranch = { ...targetRepo, currentBranch: branchParam };
+
+        await get().selectRepo(repoWithBranch, { restoreLastBranch: false });
+        await get().loadBranches();
+
+        const selectedRepo = get().selectedRepo;
+        if (selectedRepo) {
+          useFileTreeStore.getState().selectFileByPath(selectedRepo, pathParam);
+        }
+      }
+    }
   },
 }));
