@@ -42,9 +42,9 @@ export const Header: React.FC = () => {
           <button
             onClick={toggleSidebar}
             aria-label="Toggle sidebar"
-            className={`p-2 rounded-lg transition-colors ${isLight ? 'text-slate-500 hover:text-slate-700 hover:bg-slate-200' : 'text-slate-400 hover:text-white hover:bg-slate-800'}`}
+            className={`p-2.5 rounded-lg transition-colors ${isLight ? 'text-slate-500 hover:text-slate-700 hover:bg-slate-200' : 'text-slate-400 hover:text-white hover:bg-slate-800'}`}
           >
-            <Menu size={20} />
+            <Menu size={24} />
           </button>
 
           <div className="flex items-center gap-3 text-sm truncate">
@@ -82,10 +82,10 @@ export const Header: React.FC = () => {
               <button
                 onClick={handleRefreshContent}
                 aria-label="Refresh content"
-                className={`p-2 rounded-lg transition-all ${(isLoadingContent || isLoadingTree) ? 'animate-spin text-indigo-400' : ''} ${isLight ? 'text-slate-500 hover:text-indigo-500 hover:bg-slate-200' : 'text-slate-400 hover:text-indigo-400 hover:bg-slate-800'}`}
+                className={`p-2.5 rounded-lg transition-all ${(isLoadingContent || isLoadingTree) ? 'animate-spin text-indigo-400' : ''} ${isLight ? 'text-slate-500 hover:text-indigo-500 hover:bg-slate-200' : 'text-slate-400 hover:text-indigo-400 hover:bg-slate-800'}`}
                 title="Refresh Content"
               >
-                <RefreshCw size={18} />
+                <RefreshCw size={24} />
               </button>
             </>
           )}
@@ -108,10 +108,10 @@ export const Header: React.FC = () => {
             <button
               onClick={handleRefreshContent}
               aria-label="Refresh content"
-              className={`p-1 rounded transition-all ${(isLoadingContent || isLoadingTree) ? 'animate-spin text-indigo-400' : ''} ${isLight ? 'text-slate-500 hover:text-indigo-500 hover:bg-slate-200' : 'text-slate-400 hover:text-indigo-400 hover:bg-slate-800'}`}
+              className={`p-2.5 rounded transition-all ${(isLoadingContent || isLoadingTree) ? 'animate-spin text-indigo-400' : ''} ${isLight ? 'text-slate-500 hover:text-indigo-500 hover:bg-slate-200' : 'text-slate-400 hover:text-indigo-400 hover:bg-slate-800'}`}
               title="Refresh Content"
             >
-              <RefreshCw size={16} />
+              <RefreshCw size={24} />
             </button>
           </div>
         </div>

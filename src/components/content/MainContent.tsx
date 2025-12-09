@@ -53,7 +53,7 @@ export const MainContent: React.FC = memo(() => {
   return (
     <main className={`flex-1 flex flex-col h-full relative w-full transition-[margin] duration-300 ease-in-out ${sidebarOpen ? 'md:ml-72' : 'md:ml-0'} ${isLight ? 'bg-(--color-bg-primary)' : 'bg-slate-950'}`}>
       <Header />
-      <div ref={scrollRef} className={`flex-1 overflow-y-auto overscroll-none p-4 md:p-8 custom-scrollbar transition-[padding] duration-200 ${headerVisible ? 'pt-25' : 'pt-4'} md:pt-8`}>
+      <div ref={scrollRef} className={`flex-1 overflow-y-auto overscroll-none p-4 md:p-8 custom-scrollbar transition-[padding] duration-200 ${headerVisible ? 'pt-29' : 'pt-4'} md:pt-8`}>
         <Breadcrumb />
         <DocumentView />
       </div>

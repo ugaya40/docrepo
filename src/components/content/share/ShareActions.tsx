@@ -41,10 +41,10 @@ export const ShareActions: React.FC = () => {
         onClick={() => setShowMenu(!showMenu)}
         disabled={htmlState.isGenerating}
         aria-label="Export and print options"
-        className={`p-2 rounded-lg transition-all ${htmlState.isGenerating ? 'text-indigo-400 cursor-wait' : ''} ${isLight ? 'text-slate-500 hover:text-indigo-500 hover:bg-slate-200' : 'text-slate-400 hover:text-indigo-400 hover:bg-slate-800'}`}
+        className={`p-2.5 rounded-lg transition-all ${htmlState.isGenerating ? 'text-indigo-400 cursor-wait' : ''} ${isLight ? 'text-slate-500 hover:text-indigo-500 hover:bg-slate-200' : 'text-slate-400 hover:text-indigo-400 hover:bg-slate-800'}`}
         title="Download & Print"
       >
-        {htmlState.isGenerating ? <Loader2 size={18} className="animate-spin" /> : <MoreVertical size={18} />}
+        {htmlState.isGenerating ? <Loader2 size={24} className="animate-spin" /> : <MoreVertical size={24} />}
       </button>
 
       {showMenu && (
@@ -58,12 +58,12 @@ export const ShareActions: React.FC = () => {
             <>
               <DownloadAsHtmlButton
                 onDownloadStart={() => setShowMenu(false)}
-                onDownloadEnd={() => {}}
+                onDownloadEnd={() => { }}
               />
               {isMobile && (
                 <ShareAsHtmlButton
                   onShareStart={() => setShowMenu(false)}
-                  onShareEnd={() => {}}
+                  onShareEnd={() => { }}
                 />
               )}
             </>

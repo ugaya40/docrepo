@@ -37,8 +37,8 @@ export const SideHeader: React.FC = () => {
           </h2>
           <ThemeSelector />
         </div>
-        <button onClick={closeSidebar} className={`md:hidden ${isLight ? 'text-slate-500' : 'text-slate-400'}`}>
-          <X size={20} />
+        <button onClick={closeSidebar} className={`md:hidden p-2.5 rounded-lg transition-colors ${isLight ? 'text-slate-500 hover:bg-slate-100' : 'text-slate-400 hover:bg-slate-800'}`}>
+          <X size={24} />
         </button>
       </div>
 
@@ -75,10 +75,10 @@ export const SideHeader: React.FC = () => {
         <button
           onClick={loadRepos}
           disabled={isLoadingRepos}
-          className={`p-2 rounded-lg transition-all disabled:opacity-50 ${isLight ? 'text-slate-500 hover:text-indigo-500 hover:bg-slate-200' : 'text-slate-400 hover:text-indigo-400 hover:bg-slate-800'}`}
+          className={`p-3 rounded-lg transition-all disabled:opacity-50 ${isLight ? 'text-slate-500 hover:text-indigo-500 hover:bg-slate-200' : 'text-slate-400 hover:text-indigo-400 hover:bg-slate-800'}`}
           title="Refresh repository list"
         >
-          <RefreshCw size={14} className={isLoadingRepos ? 'animate-spin' : ''} />
+          <RefreshCw size={20} className={isLoadingRepos ? 'animate-spin' : ''} />
         </button>
       </div>
 
@@ -112,10 +112,10 @@ export const SideHeader: React.FC = () => {
           <button
             onClick={loadBranches}
             disabled={isLoadingBranches}
-            className={`p-2 rounded-lg transition-all disabled:opacity-50 ${isLight ? 'text-slate-500 hover:text-indigo-500 hover:bg-slate-200' : 'text-slate-400 hover:text-indigo-400 hover:bg-slate-800'}`}
+            className={`p-3 rounded-lg transition-all disabled:opacity-50 ${isLight ? 'text-slate-500 hover:text-indigo-500 hover:bg-slate-200' : 'text-slate-400 hover:text-indigo-400 hover:bg-slate-800'}`}
             title="Refresh branch list"
           >
-            <RefreshCw size={14} className={isLoadingBranches ? 'animate-spin' : ''} />
+            <RefreshCw size={20} className={isLoadingBranches ? 'animate-spin' : ''} />
           </button>
         </div>
       )}

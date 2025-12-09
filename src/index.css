@@ -99,6 +99,22 @@ body {
     animation: content-fadeIn 0.3s ease-out forwards;
   }
 
+  @keyframes modal-pop {
+    0% {
+      opacity: 0;
+      transform: scale(0.95) translateY(10px);
+    }
+
+    100% {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+  }
+
+  .animate-modal-pop {
+    animation: modal-pop 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
   /* GitHub Alerts - shared */
   .markdown-alert {
     @apply border-l-4 rounded-r-lg px-4 py-3 my-4;

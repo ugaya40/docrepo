@@ -43,9 +43,9 @@ export const ShareAsHtmlButton: React.FC<ShareAsHtmlButtonProps> = ({
     <button
       onClick={handleShare}
       disabled={state.isGenerating}
-      className={`w-full flex items-center gap-2 px-3 py-2 text-sm transition-colors ${isLight ? 'text-slate-600 hover:text-slate-800 hover:bg-slate-100' : 'text-slate-300 hover:text-white hover:bg-slate-700'}`}
+      className={`w-full flex items-center gap-2 px-4 py-3 text-sm transition-colors ${isLight ? 'text-slate-600 hover:text-slate-800 hover:bg-slate-100' : 'text-slate-300 hover:text-white hover:bg-slate-700'}`}
     >
-      {state.isGenerating ? <Loader2 size={14} className="animate-spin" /> : <Share2 size={14} />}
+      {state.isGenerating ? <Loader2 size={20} className="animate-spin" /> : <Share2 size={20} />}
       Share HTML
     </button>
   );

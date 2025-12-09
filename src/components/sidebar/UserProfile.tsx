@@ -47,87 +47,165 @@ export const UserProfile: React.FC = () => {
         <button
           onClick={() => setShowSettings(true)}
           aria-label="Settings"
-          className={`p-2 rounded-lg transition-colors ${isLight ? 'text-slate-500 hover:text-slate-700 hover:bg-slate-200' : 'text-slate-400 hover:text-white hover:bg-slate-800'}`}
+          className={`p-2.5 rounded-lg transition-colors ${isLight ? 'text-slate-500 hover:text-slate-700 hover:bg-slate-200' : 'text-slate-400 hover:text-white hover:bg-slate-800'}`}
           title="Settings"
         >
-          <Settings size={18} />
-        </button>
-        <button
-          onClick={logout}
-          aria-label="Logout"
-          className={`p-2 rounded-lg transition-colors ${isLight ? 'text-slate-500 hover:text-red-500 hover:bg-slate-200' : 'text-slate-400 hover:text-red-400 hover:bg-slate-800'}`}
-          title="Logout"
-        >
-          <LogOut size={18} />
+          <Settings size={24} />
         </button>
       </div>
 
       {showSettings &&
         createPortal(
           <div
-            className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4"
             onClick={() => {
               setShowSettings(false);
               setConfirmClear(false);
             }}
           >
             <div
-              className={`border rounded-xl w-full max-w-xs shadow-xl ${isLight ? 'bg-white border-slate-300' : 'bg-slate-900 border-slate-700'}`}
+              className={`animate-modal-pop border w-full max-w-md shadow-2xl rounded-2xl overflow-hidden ${isLight ? 'bg-white border-slate-200 shadow-slate-200/50' : 'bg-slate-900 border-slate-700 shadow-black/50'}`}
               onClick={(e) => e.stopPropagation()}
             >
-              <div className={`flex items-center justify-between p-3 border-b ${isLight ? 'border-slate-200' : 'border-slate-800'}`}>
-                <h2 className={`text-sm font-medium ${isLight ? 'text-slate-800' : 'text-white'}`}>Settings</h2>
+              <div className={`flex items-center justify-between p-4 border-b ${isLight ? 'border-slate-200 bg-slate-100/60' : 'border-slate-800 bg-slate-800/60'}`}>
+                <div className="flex items-center gap-3">
+                  <div className={`p-1 ${isLight ? 'text-slate-500' : 'text-slate-400'}`}>
+                    <Settings size={20} />
+                  </div>
+                  <div>
+                    <h2 className={`font-semibold ${isLight ? 'text-slate-900' : 'text-white'}`}>Settings</h2>
+                    <p className="text-xs text-slate-500">Manage your preferences</p>
+                  </div>
+                </div>
                 <button
                   onClick={() => {
                     setShowSettings(false);
                     setConfirmClear(false);
                   }}
                   aria-label="Close settings"
-                  className={`p-1 rounded transition-colors ${isLight ? 'text-slate-500 hover:text-slate-700 hover:bg-slate-100' : 'text-slate-400 hover:text-white hover:bg-slate-800'}`}
+                  className={`p-2 rounded-lg transition-colors ${isLight ? 'text-slate-400 hover:text-slate-600 hover:bg-slate-100' : 'text-slate-500 hover:text-slate-300 hover:bg-slate-800'}`}
                 >
-                  <X size={16} />
+                  <X size={20} />
                 </button>
               </div>
-              <div className="p-3 space-y-2">
+
+              <div className="p-4 space-y-6">
+
+                {/* Data Management Section */}
                 <div>
-                  <button
-                    onClick={() => setConfirmClear(true)}
-                    className={`w-full flex items-center gap-2 px-3 py-2 text-sm rounded-lg transition-colors ${isLight ? 'text-red-600 hover:text-red-700 hover:bg-red-50' : 'text-red-400 hover:text-red-300 hover:bg-red-950/50'}`}
-                  >
-                    <Trash2 size={16} />
-                    Clear cache
-                  </button>
-                  <p className="text-xs text-slate-500 mt-1 px-3">
-                    {cacheStats
-                      ? `${cacheStats.count} entries, ${formatSize(cacheStats.size)}`
-                      : 'Loading...'}
-                  </p>
+                  <h3 className={`text-xs font-semibold uppercase tracking-wider mb-3 px-1 ${isLight ? 'text-slate-400' : 'text-slate-500'}`}>Data Management</h3>
+
+                  {!confirmClear ? (
+                    <button
+                      onClick={() => setConfirmClear(true)}
+                      className={`w-full group relative flex items-center justify-between p-3 rounded-xl border transition-all duration-200 ${isLight
+                          ? 'border-slate-200 bg-white hover:border-red-200 hover:shadow-sm hover:shadow-red-50'
+                          : 'border-slate-800 bg-slate-900/50 hover:border-red-900/50 hover:bg-red-950/10'
+                        }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className={`p-2 rounded-lg transition-colors ${isLight
+                            ? 'bg-red-50 text-red-500 group-hover:bg-red-100 group-hover:text-red-600'
+                            : 'bg-red-950/30 text-red-500 group-hover:bg-red-950/50 group-hover:text-red-400'
+                          }`}>
+                          <Trash2 size={18} />
+                        </div>
+                        <div className="text-left">
+                          <p className={`text-sm font-medium transition-colors ${isLight
+                              ? 'text-slate-700 group-hover:text-red-700'
+                              : 'text-slate-200 group-hover:text-red-400'
+                            }`}>Clear Cache</p>
+                          <p className="text-xs text-slate-500">Remove all locally cached data</p>
+                        </div>
+                      </div>
+
+                      <div className={`text-right text-xs ${isLight ? 'text-slate-400' : 'text-slate-600'}`}>
+                        {cacheStats ? (
+                          <>
+                            <p>{cacheStats.count} files</p>
+                            <p>{formatSize(cacheStats.size)}</p>
+                          </>
+                        ) : (
+                          <span>Loading...</span>
+                        )}
+                      </div>
+                    </button>
+                  ) : (
+                    <div className={`rounded-xl border p-4 space-y-3 animate-content-fadeIn ${isLight
+                        ? 'bg-red-50 border-red-100'
+                        : 'bg-red-950/20 border-red-900/50'
+                      }`}>
+                      <div className="flex items-start gap-3">
+                        <div className={`p-2 rounded-full shrink-0 ${isLight ? 'bg-red-100 text-red-600' : 'bg-red-900/30 text-red-400'}`}>
+                          <Trash2 size={18} />
+                        </div>
+                        <div>
+                          <h4 className={`text-sm font-semibold ${isLight ? 'text-red-900' : 'text-red-200'}`}>Clear all cached data?</h4>
+                          <p className={`text-xs mt-1 ${isLight ? 'text-red-700' : 'text-red-300/80'}`}>
+                            This action cannot be undone. The page will reload to apply changes.
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="flex gap-2 pl-12">
+                        <button
+                          onClick={() => setConfirmClear(false)}
+                          className={`flex-1 px-3 py-2 text-xs font-medium rounded-lg transition-colors ${isLight
+                              ? 'bg-white border border-red-200 text-red-700 hover:bg-red-50'
+                              : 'bg-slate-900 border border-red-900/50 text-red-300 hover:bg-red-950/50'
+                            }`}
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          onClick={async () => {
+                            await cacheService.clearAll();
+                            window.location.reload();
+                          }}
+                          className="flex-1 px-3 py-2 text-xs font-medium text-white bg-red-600 hover:bg-red-500 rounded-lg shadow-sm transition-colors"
+                        >
+                          Confirm Clear
+                        </button>
+                      </div>
+                    </div>
+                  )}
                 </div>
 
-                {confirmClear && (
-                  <div className={`rounded-lg p-3 space-y-2 ${isLight ? 'bg-red-50 border border-red-200' : 'bg-red-950/30 border border-red-900/50'}`}>
-                    <p className={`text-xs ${isLight ? 'text-red-700' : 'text-red-300'}`}>
-                      Are you sure? This will reload the page.
-                    </p>
-                    <div className="flex gap-2">
-                      <button
-                        onClick={() => setConfirmClear(false)}
-                        className={`flex-1 px-3 py-1.5 text-xs rounded transition-colors ${isLight ? 'text-slate-600 hover:text-slate-800 bg-slate-200 hover:bg-slate-300' : 'text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700'}`}
-                      >
-                        Cancel
-                      </button>
-                      <button
-                        onClick={async () => {
-                          await cacheService.clearAll();
-                          window.location.reload();
-                        }}
-                        className="flex-1 px-3 py-1.5 text-xs text-white bg-red-600 hover:bg-red-500 rounded transition-colors"
-                      >
-                        Clear
-                      </button>
+                {/* Account Section */}
+                <div>
+                  <h3 className={`text-xs font-semibold uppercase tracking-wider mb-3 px-1 ${isLight ? 'text-slate-400' : 'text-slate-500'}`}>Account</h3>
+
+                  <button
+                    onClick={logout}
+                    className={`w-full group relative flex items-center justify-between p-3 rounded-xl border transition-all duration-200 ${isLight
+                        ? 'border-slate-200 bg-white hover:border-slate-300 hover:shadow-sm'
+                        : 'border-slate-800 bg-slate-900/50 hover:border-slate-700 hover:bg-slate-800/80'
+                      }`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className={`p-2 rounded-lg transition-colors ${isLight
+                          ? 'bg-slate-100 text-slate-500 group-hover:bg-slate-200 group-hover:text-slate-700'
+                          : 'bg-slate-800 text-slate-400 group-hover:bg-slate-700 group-hover:text-slate-200'
+                        }`}>
+                        <LogOut size={18} />
+                      </div>
+                      <div className="text-left">
+                        <p className={`text-sm font-medium transition-colors ${isLight
+                            ? 'text-slate-700 group-hover:text-slate-900'
+                            : 'text-slate-200 group-hover:text-white'
+                          }`}>Sign Out</p>
+                        <p className="text-xs text-slate-500">Sign out of your account</p>
+                      </div>
                     </div>
-                  </div>
-                )}
+                  </button>
+                </div>
+
+                {/* Footer Info */}
+                <div className="pt-2 flex justify-center">
+                  <p className={`text-[10px] ${isLight ? 'text-slate-400' : 'text-slate-600'}`}>
+                    docRepo v{import.meta.env.VITE_APP_VERSION}
+                  </p>
+                </div>
               </div>
             </div>
           </div>,

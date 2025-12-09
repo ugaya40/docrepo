@@ -74,7 +74,7 @@ export const FileTree: React.FC = () => {
   const selectedFile = useFileTreeStore((s) => s.selectedFile);
   const expandedIds = useFileTreeStore((s) => s.expandedIds);
   const isLoadingTree = useFileTreeStore((s) => s.isLoadingTree);
-  const {selectFile, toggleFolder, refreshTree} = useFileTreeStore.getState();
+  const { selectFile, toggleFolder, refreshTree } = useFileTreeStore.getState();
   const closeSidebar = useLayoutStore.getState().closeSidebar;
   const theme = useThemeStore((s) => s.theme);
   const isLight = theme === 'light';
@@ -203,21 +203,21 @@ export const FileTree: React.FC = () => {
   }, [expandedIds, processedFiles]);
 
   return (
-    <div className="flex-1 overflow-auto py-2 custom-scrollbar">
-      <div className="flex items-center justify-between px-4 pr-[0.65rem] py-2 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+    <div className="flex-1 flex flex-col min-h-0">
+      <div className="flex items-center justify-between px-4 pr-[0.65rem] py-2 text-xs font-semibold text-slate-500 uppercase tracking-wider shrink-0">
         <span>Explorer</span>
         {selectedRepo && (
           <button
             onClick={handleRefreshTree}
-            className={`p-1 rounded transition-colors ${isLoadingTree ? 'animate-spin' : ''} ${isLight ? 'hover:bg-slate-200 text-slate-500 hover:text-slate-700' : 'hover:bg-slate-800 text-slate-400 hover:text-white'}`}
+            className={`p-3 mr-1.5 rounded-lg transition-colors ${isLoadingTree ? 'animate-spin' : ''} ${isLight ? 'hover:bg-slate-200 text-slate-500 hover:text-slate-700' : 'hover:bg-slate-800 text-slate-400 hover:text-white'}`}
             title="Refresh Tree"
           >
-            <RefreshCw size={14} />
+            <RefreshCw size={20} />
           </button>
         )}
       </div>
 
-      <div className="mt-1">
+      <div className="flex-1 overflow-y-auto py-2 custom-scrollbar">
         {!selectedRepo ? (
           <div className="px-4 py-8 text-center text-slate-500">
             <FolderOpen size={32} className="mx-auto mb-2 opacity-50" />

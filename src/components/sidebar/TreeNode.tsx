@@ -52,7 +52,7 @@ export const TreeNode: React.FC<TreeNodeProps> = ({
         aria-expanded={node.type === 'dir' ? isExpanded : undefined}
         aria-selected={isSelected}
         className={`
-          flex items-center py-2 pr-4 cursor-pointer text-sm transition-colors duration-200 outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-inset
+          flex items-center py-3 pr-4 cursor-pointer text-sm transition-colors duration-200 outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-inset
           ${isSelected ? selectedClass : defaultClass}
         `}
         style={{ paddingLeft }}
@@ -62,9 +62,9 @@ export const TreeNode: React.FC<TreeNodeProps> = ({
       >
         <span className="mr-2 opacity-70">
           {node.type === 'dir' && (
-            isExpanded ? <ChevronDown size={14} /> : <ChevronRight size={14} />
+            isExpanded ? <ChevronDown size={16} /> : <ChevronRight size={16} />
           )}
-          {node.type === 'file' && <div className="w-3.5" />}
+          {node.type === 'file' && <div className="w-4" />}
         </span>
         <span className="mr-2">
           <FileIcon type={node.type} isOpen={isExpanded} />
