@@ -56,6 +56,7 @@ export const MainContent: React.FC = memo(() => {
       <div ref={scrollRef} className={`flex-1 overflow-y-auto overscroll-none p-4 md:p-8 custom-scrollbar transition-[padding] duration-200 ${headerVisible ? 'pt-29' : 'pt-4'} md:pt-8`}>
         <Breadcrumb />
         <DocumentView />
+        <div className="h-[100px] w-full shrink-0" aria-hidden="true" />
       </div>
     </main>
   );
