@@ -40,8 +40,8 @@ export const MainApp: React.FC = () => {
     }
 
     link.href = theme === 'light'
-      ? 'https:cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css'
-      : 'https:cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css';
+      ? 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css'
+      : 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css';
   }, [theme]);
 
   return (
