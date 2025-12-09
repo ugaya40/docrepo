@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { toast, Toaster } from 'sonner';
 import { useAuthStore } from './stores/authStore';
 import { useThemeStore } from './stores/themeStore';
+import { usePreferredColorScheme } from './hooks/usePreferredColorScheme';
 import { LoginScreen } from './components/auth/LoginScreen';
 import { MainApp } from './components/MainApp';
 
@@ -9,6 +10,15 @@ export default function App() {
   const isLoggedIn = useAuthStore((s) => s.isLoggedIn);
   const isLoading = useAuthStore((s) => s.isLoading);
   const theme = useThemeStore((s) => s.theme);
+  const mode = useThemeStore((s) => s.mode);
+  const setTheme = useThemeStore((s) => s.setTheme);
+  const preferredColorScheme = usePreferredColorScheme();
+
+  useEffect(() => {
+    if (mode === 'system') {
+      setTheme(preferredColorScheme);
+    }
+  }, [mode, preferredColorScheme]);
 
   useEffect(() => {
 

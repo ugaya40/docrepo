@@ -28,7 +28,7 @@ export const PrintButton: React.FC = () => {
 
   const handlePrint = () => {
     if (!isLight) {
-      useThemeStore.getState().setTheme('light');
+      useThemeStore.getState().setMode('light');
       return;
     }
     window.print();

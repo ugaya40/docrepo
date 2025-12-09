@@ -1,8 +1,9 @@
 import { useEffect } from 'react';
-import { ChevronDown, Database, X, Loader2, RefreshCw, GitBranch, FolderGit2, Sun, Moon } from 'lucide-react';
+import { ChevronDown, Database, X, Loader2, RefreshCw, GitBranch, FolderGit2 } from 'lucide-react';
 import { useRepoContextStore } from '../../stores/repoContextStore';
 import { useLayoutStore } from '../../stores/layoutStore';
 import { useThemeStore } from '../../stores/themeStore';
+import { ThemeSelector } from './ThemeSelector';
 
 export const SideHeader: React.FC = () => {
   const repos = useRepoContextStore((s) => s.repos);
@@ -10,10 +11,9 @@ export const SideHeader: React.FC = () => {
   const selectedRepo = useRepoContextStore((s) => s.selectedRepo);
   const isLoadingRepos = useRepoContextStore((s) => s.isLoadingRepos);
   const isLoadingBranches = useRepoContextStore((s) => s.isLoadingBranches);
-  const {loadRepos, loadBranches, selectRepo, selectBranch} = useRepoContextStore.getState();
+  const { loadRepos, loadBranches, selectRepo, selectBranch } = useRepoContextStore.getState();
   const closeSidebar = useLayoutStore.getState().closeSidebar;
   const theme = useThemeStore((s) => s.theme);
-  const toggleTheme = useThemeStore((s) => s.toggleTheme);
 
   useEffect(() => {
     loadRepos();
@@ -35,19 +35,7 @@ export const SideHeader: React.FC = () => {
             <Database size={20} className="text-indigo-500" />
             docRepo
           </h2>
-          <button
-            onClick={toggleTheme}
-            className="relative w-9 h-5 mt-0.5 rounded-full transition-colors duration-200 focus:outline-none"
-            style={{ backgroundColor: isLight ? '#cbd5e1' : '#6366f1' }}
-            title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
-          >
-            <span
-              className="absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform duration-200 flex items-center justify-center"
-              style={{ transform: isLight ? 'translateX(0)' : 'translateX(16px)' }}
-            >
-              {isLight ? <Sun size={10} className="text-amber-500" /> : <Moon size={10} className="text-indigo-600" />}
-            </span>
-          </button>
+          <ThemeSelector />
         </div>
         <button onClick={closeSidebar} className={`md:hidden ${isLight ? 'text-slate-500' : 'text-slate-400'}`}>
           <X size={20} />
