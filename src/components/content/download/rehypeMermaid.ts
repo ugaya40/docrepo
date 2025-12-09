@@ -1,6 +1,7 @@
 import { visit } from 'unist-util-visit';
 import type { Root, Element } from 'hast';
 import mermaid from 'mermaid';
+import { generateMermaidId, wrapWithMermaidTheme } from '../utils/mermaidUtils';
 
 const svgToBase64Img = (svg: string): Element => {
   const maxWidthMatch = svg.match(/style="[^"]*max-width:\s*([^;\"]+)/);
@@ -28,14 +29,7 @@ const svgToBase64Img = (svg: string): Element => {
 
 export const rehypeMermaid = () => {
   return async (tree: Root) => {
-    mermaid.initialize({
-      startOnLoad: false,
-      theme: 'default',
-      securityLevel: 'loose',
-      suppressErrorRendering: true
-    });
-
-    const nodesToReplace: { parent: Element; index: number; mermaidCode: string }[] = [];
+    const nodesToProcess: { node: Element; index: number; parent: Element }[] = [];
 
     visit(tree, 'element', (node, index, parent) => {
       if (
@@ -47,20 +41,26 @@ export const rehypeMermaid = () => {
         const className = codeNode.properties?.className as string[] | undefined;
 
         if (className?.includes('language-mermaid')) {
-          const textNode = codeNode.children[0];
-          const mermaidCode = textNode && 'value' in textNode ? textNode.value : '';
-
-          if (mermaidCode && parent && typeof index === 'number') {
-            nodesToReplace.push({ parent: parent as Element, index, mermaidCode });
+          if (parent && typeof index === 'number') {
+            nodesToProcess.push({ node, index, parent: parent as Element });
           }
         }
       }
     });
 
-    for (const { parent, index, mermaidCode } of nodesToReplace) {
+    for (const { node, index, parent } of nodesToProcess) {
+      const codeNode = node.children[0] as Element;
+      const textNode = codeNode.children[0];
+      const chartCode = textNode && 'value' in textNode ? textNode.value : '';
+
+      if (!chartCode) {
+        continue;
+      }
+
       try {
-        const id = `mermaid-${Math.random().toString(36).slice(2, 11)}`;
-        const { svg } = await mermaid.render(id, mermaidCode);
+        const id = generateMermaidId();
+        const themeSrc = wrapWithMermaidTheme(chartCode, 'default');
+        const { svg } = await mermaid.render(id, themeSrc);
         const imgNode = svgToBase64Img(svg);
 
         const wrapper: Element = {

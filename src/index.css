@@ -3,7 +3,8 @@
 @import "./styles/theme-light.css";
 @plugin "@tailwindcss/typography";
 
-html, body {
+html,
+body {
   overscroll-behavior: none;
 }
 
@@ -34,9 +35,11 @@ html, body {
   .katex-display {
     @apply my-6 py-4 px-6 overflow-x-auto;
   }
+
   .katex {
     @apply font-medium;
   }
+
   .katex .frac-line {
     border-bottom-width: 2px;
   }
@@ -46,10 +49,12 @@ html, body {
     scrollbar-width: thin;
     scrollbar-gutter: stable;
   }
+
   .custom-scrollbar::-webkit-scrollbar {
     width: 8px;
     height: 8px;
   }
+
   .custom-scrollbar::-webkit-scrollbar-thumb {
     border-radius: 4px;
   }
@@ -59,16 +64,20 @@ html, body {
     scrollbar-width: thin;
     scrollbar-color: rgba(148, 163, 184, 0.5) transparent;
   }
+
   .mermaid-scroll::-webkit-scrollbar {
     height: 8px;
   }
+
   .mermaid-scroll::-webkit-scrollbar-track {
     background: transparent;
   }
+
   .mermaid-scroll::-webkit-scrollbar-thumb {
     background-color: rgba(148, 163, 184, 0.5);
     border-radius: 4px;
   }
+
   .mermaid-scroll::-webkit-scrollbar-thumb:hover {
     background-color: rgba(148, 163, 184, 0.7);
   }
@@ -79,11 +88,13 @@ html, body {
       opacity: 0;
       transform: translateY(5px);
     }
+
     to {
       opacity: 1;
       transform: translateY(0);
     }
   }
+
   .animate-content-fadeIn {
     animation: content-fadeIn 0.3s ease-out forwards;
   }
@@ -92,24 +103,42 @@ html, body {
   .markdown-alert {
     @apply border-l-4 rounded-r-lg px-4 py-3 my-4;
   }
+
   .markdown-alert-title {
     @apply flex items-center gap-2 font-semibold text-sm mb-1;
   }
+
   .markdown-alert-title svg {
     @apply fill-current w-4 h-4;
   }
-  .markdown-alert-note { @apply border-blue-500; }
-  .markdown-alert-tip { @apply border-emerald-500; }
-  .markdown-alert-important { @apply border-purple-500; }
-  .markdown-alert-warning { @apply border-amber-500; }
-  .markdown-alert-caution { @apply border-red-500; }
+
+  .markdown-alert-note {
+    @apply border-blue-500;
+  }
+
+  .markdown-alert-tip {
+    @apply border-emerald-500;
+  }
+
+  .markdown-alert-important {
+    @apply border-purple-500;
+  }
+
+  .markdown-alert-warning {
+    @apply border-amber-500;
+  }
+
+  .markdown-alert-caution {
+    @apply border-red-500;
+  }
 
   /* Remove backticks and font-weight from inline code */
-  .prose :not(pre) > code::before,
-  .prose :not(pre) > code::after {
+  .prose :not(pre)>code::before,
+  .prose :not(pre)>code::after {
     content: none !important;
   }
-  .prose :not(pre) > code {
+
+  .prose :not(pre)>code {
     font-weight: normal !important;
     padding: 0.2em 0.4em;
     border-radius: 6px;
@@ -128,9 +157,11 @@ html, body {
   background: transparent !important;
   opacity: 0.6 !important;
 }
+
 .toast-close-button:hover {
   opacity: 1 !important;
 }
+
 .toast-close-button svg {
   width: 20px !important;
   height: 20px !important;
@@ -141,23 +172,79 @@ html, body {
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
-  html, body, main, #root, [class*="flex"], [class*="overflow"] {
-    overflow: visible !important;
-    height: auto !important;
-    max-height: none !important;
-  }
-  header, aside, nav {
+
+  /* Hide the main application */
+  #app-root {
     display: none !important;
   }
-  #document-content {
+
+  /* Show and reset the print container */
+  #print-container {
+    display: block !important;
+    background-color: white !important;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Ensure background of the SVG area itself is transparent */
+  #print-container .mermaid-scroll {
+    background-color: transparent !important;
+  }
+
+  /* Force light theme mermaid in print */
+  #print-container .mermaid-theme-light {
+    display: block !important;
+  }
+
+  #print-container .mermaid-theme-dark {
+    display: none !important;
+  }
+
+  /* Ensure document content flows correctly in print */
+  #print-container #document-content {
     position: static !important;
     width: 100% !important;
-    max-width: 100% !important;
+    max-width: none !important;
     margin: 0 !important;
     padding: 20px !important;
+    overflow: visible !important;
   }
-  main {
-    margin-left: 0 !important;
-    padding: 0 !important;
+
+  /* Ensure body doesn't clip content */
+  html,
+  body {
+    background-color: white !important;
+    height: auto !important;
+    overflow: visible !important;
   }
+}
+
+/* Mermaid Dual Theme Visibility Logic */
+
+/* Default: Hide both to prevent flash (controlled by specific theme classes below) */
+.mermaid-theme-light,
+.mermaid-theme-dark {
+  display: none;
+}
+
+/* Light Mode: Show Light, Hide Dark */
+.light .mermaid-theme-light {
+  display: block;
+}
+
+.light .mermaid-theme-dark {
+  display: none;
+}
+
+/* Dark Mode: Hide Light, Show Dark */
+.dark .mermaid-theme-light {
+  display: none;
+}
+
+.dark .mermaid-theme-dark {
+  display: block;
 }

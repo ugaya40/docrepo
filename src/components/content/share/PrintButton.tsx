@@ -1,6 +1,7 @@
 import { Loader2, Printer } from 'lucide-react';
 import { useThemeStore } from '../../../stores/themeStore';
 import { useContentRenderSession } from '../../../stores/sessions/contentRenderSession';
+import { usePrintSync } from '../../../hooks/usePrintSync';
 
 type MainButtonProps = {
   disabled?: boolean;
@@ -21,21 +22,12 @@ const MainButton: React.FC<MainButtonProps> = ({ disabled, isLight, label, onCli
 );
 
 export const PrintButton: React.FC = () => {
+  const { handlePrint } = usePrintSync();
   const theme = useThemeStore((s) => s.theme);
   const isLight = theme === 'light';
   const { state: sessionState } = useContentRenderSession();
-  const isPrintReady = !isLight || sessionState.pendingRenderCount === 0;
+  const isPrintReady = sessionState.pendingRenderCount === 0;
 
-  const handlePrint = () => {
-    if (!isLight) {
-      useThemeStore.getState().setMode('light');
-      return;
-    }
-    window.print();
-  };
-
-  const label = isLight ? 'Print' : 'Prepare Print (to light theme)';
-
-  return <MainButton disabled={!isPrintReady} isLight={isLight} label={label} onClick={handlePrint} />;
+  return <MainButton disabled={!isPrintReady} isLight={isLight} label="Print" onClick={handlePrint} />;
 };
 

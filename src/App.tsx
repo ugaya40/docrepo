@@ -5,6 +5,7 @@ import { useThemeStore } from './stores/themeStore';
 import { usePreferredColorScheme } from './hooks/usePreferredColorScheme';
 import { LoginScreen } from './components/auth/LoginScreen';
 import { MainApp } from './components/MainApp';
+import { usePrintSync } from './hooks/usePrintSync';
 
 export default function App() {
   const isLoggedIn = useAuthStore((s) => s.isLoggedIn);
@@ -13,6 +14,7 @@ export default function App() {
   const mode = useThemeStore((s) => s.mode);
   const setTheme = useThemeStore((s) => s.setTheme);
   const preferredColorScheme = usePreferredColorScheme();
+  usePrintSync();
 
   useEffect(() => {
     if (mode === 'system') {
@@ -60,19 +62,22 @@ export default function App() {
   };
 
   return (
-    <div className={theme}>
-      <Toaster
-        theme={theme}
-        richColors
-        position="top-center"
-        closeButton
-        toastOptions={{
-          classNames: {
-            closeButton: 'toast-close-button',
-          },
-        }}
-      />
-      {renderContent()}
-    </div>
+    <>
+      <div className={theme} id="app-root">
+        <Toaster
+          theme={theme}
+          richColors
+          position="top-center"
+          closeButton
+          toastOptions={{
+            classNames: {
+              closeButton: 'toast-close-button',
+            },
+          }}
+        />
+        {renderContent()}
+      </div>
+      <div id="print-container" className="light" style={{ display: 'none' }} />
+    </>
   );
 }

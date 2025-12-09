@@ -54,7 +54,6 @@ const compactFolders = (
         name: `${node.name}/${child.name}`,
         children: child.children,
       };
-      // 子のparentMap情報を更新（マージされたノードのparentは現在のparent）
       parentMap.delete(child.path);
       resultNodes.push(merged);
     } else {
@@ -62,7 +61,6 @@ const compactFolders = (
     }
   }
 
-  // 最終的なresultNodesでparentMapを設定
   for (let i = 0; i < resultNodes.length; i++) {
     parentMap.set(resultNodes[i].path, { parent, siblings: resultNodes, index: i });
   }

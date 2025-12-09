@@ -42,7 +42,7 @@ export const useThemeStore = create<ThemeStore>()(
     }),
     {
       name: 'docrepo-theme',
-      partialize: (state) => ({ mode: state.mode, theme: state.theme }), // 両方永続化
+      partialize: (state) => ({ mode: state.mode, theme: state.theme }),
     }
   )
 );
