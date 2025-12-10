@@ -183,6 +183,10 @@ body {
   height: 20px !important;
 }
 
+[data-sonner-toast] {
+  padding-right: 48px !important;
+}
+
 @media print {
   * {
     -webkit-print-color-adjust: exact !important;

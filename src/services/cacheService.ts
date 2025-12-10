@@ -63,4 +63,20 @@ export const cacheService = {
     );
     return { count, size };
   },
+
+  async getRepos(): Promise<Repo[] | null> {
+    return await idbGet('repos') ?? null;
+  },
+
+  async setRepos(repos: Repo[]): Promise<void> {
+    await idbSet('repos', repos);
+  },
+
+  async getBranches(repoFullName: string): Promise<string[] | null> {
+    return await idbGet(`branches:${repoFullName}`) ?? null;
+  },
+
+  async setBranches(repoFullName: string, branches: string[]): Promise<void> {
+    await idbSet(`branches:${repoFullName}`, branches);
+  },
 };

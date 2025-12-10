@@ -7,6 +7,8 @@ import { Sidebar } from './sidebar/Sidebar';
 import { MainContent } from './content/MainContent';
 import { useHistorySync } from '../hooks/useHistorySync';
 
+import { appActions } from '../stores/appActions';
+
 export const MainApp: React.FC = () => {
   const sidebarOpen = useLayoutStore((s) => s.sidebarOpen);
   const { closeSidebar, initSidebarByWidth } = useLayoutStore.getState();
@@ -18,7 +20,7 @@ export const MainApp: React.FC = () => {
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    useRepoContextStore.getState().initializeApp(params);
+    appActions.initializeApp(params);
   }, [repos]);
 
   useEffect(() => {

@@ -22,6 +22,12 @@ let octokitInstance: Octokit | null = null;
 export const initOctokit = (token: string) => {
   octokitInstance = new Octokit({ auth: token });
 
+  octokitInstance.hook.before('request', async () => {
+    if (!navigator.onLine) {
+      throw new Error('Browser is offline');
+    }
+  });
+
   octokitInstance.hook.after('request', async (response) => {
     updateRateLimit(response.headers);
   });
@@ -40,15 +46,35 @@ export const clearOctokit = () => {
   octokitInstance = null;
 };
 
-const handleAuthError = (error: unknown) => {
+const handleApiError = (error: unknown) => {
+  // Check offline status first
+  if (!navigator.onLine) {
+    toast.error('You are currently offline. Please check your internet connection.');
+    return;
+  }
+
   if (error instanceof RequestError) {
+    // 403: Rate Limit Exceeded
     if (error.status === 403 && error.response?.headers['x-ratelimit-remaining'] === '0') {
       toast.error('API rate limit exceeded. Please wait and try again.');
       return;
     }
+    // 401/403: Unauthorized (Token Expired or Forbidden)
     if (error.status === 401 || error.status === 403) {
       useAuthStore.getState().logout();
+      return;
     }
+    // 500+: Server Errors
+    if (error.status >= 500) {
+      toast.error('GitHub API is experiencing issues. Please try again later.');
+      return;
+    }
+  }
+
+  // Network Errors (often TypeError: Failed to fetch)
+  if (error instanceof Error && error.message.includes('Failed to fetch')) {
+    toast.error('Network connection failed. Please check your internet connection.');
+    return;
   }
 };
 
@@ -149,7 +175,7 @@ export const githubApi = {
       if (error instanceof RequestError && error.status === 304 && cached) {
         return cached.data;
       }
-      handleAuthError(error);
+      handleApiError(error);
       throw error;
     }
   },
@@ -168,7 +194,7 @@ export const githubApi = {
         sha: data.sha,
       };
     } catch (error) {
-      handleAuthError(error);
+      handleApiError(error);
       throw error;
     }
   },
@@ -192,7 +218,7 @@ export const githubApi = {
         defaultBranch: repo.default_branch,
       }));
     } catch (error) {
-      handleAuthError(error);
+      handleApiError(error);
       throw error;
     }
   },
@@ -209,7 +235,7 @@ export const githubApi = {
 
       return data[0]?.commit.committer?.date ?? null;
     } catch (error) {
-      handleAuthError(error);
+      handleApiError(error);
       throw error;
     }
   },
@@ -226,7 +252,7 @@ export const githubApi = {
 
       return branches.map((branch) => branch.name);
     } catch (error) {
-      handleAuthError(error);
+      handleApiError(error);
       throw error;
     }
   },

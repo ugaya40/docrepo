@@ -15,7 +15,7 @@ type FileTreeState = {
 
 type FileTreeActions = {
   restore: (repo: Repo) => Promise<void>;
-  loadTree: (repo: Repo) => Promise<void>;
+  initializeTree: (repo: Repo) => Promise<void>;
   refreshTree: (repo: Repo, showLoading: boolean) => Promise<void>;
   selectFile: (repo: Repo, file: FileNode) => Promise<void>;
   selectFileByPath: (repo: Repo, path: string) => Promise<boolean>;
@@ -125,14 +125,19 @@ export const useFileTreeStore = create<FileTreeStore>((set, get) => {
       }
     },
 
-    async loadTree(repo) {
-      set({ isLoadingTree: true });
+    async initializeTree(repo) {
+      set({
+        isLoadingTree: true,
+        files: [],
+        expandedIds: new Set(),
+        selectedFile: null
+      });
+      useContentStore.getState().clear();
 
       try {
         const treeResponse = await githubApi.getTree(repo.owner, repo.name, repo.currentBranch);
         const files = buildFileTree(treeResponse.items);
-        set({ files, expandedIds: new Set(), selectedFile: null, isLoadingTree: false });
-        useContentStore.getState().clear();
+        set({ files, isLoadingTree: false });
         await saveTreeCache(repo, get());
       } catch {
         set({ isLoadingTree: false });
@@ -168,58 +173,59 @@ export const useFileTreeStore = create<FileTreeStore>((set, get) => {
       await setSelectedFileInternal(repo, file);
     },
 
-  async selectFileByPath(repo, path) {
-    const node = findNodeByPath(get().files, path);
-    if (!node || node.type === 'dir') return false;
-    get().expandParentFolders(repo, path);
-    await get().selectFile(repo, node);
-    return true;
-  },
+    async selectFileByPath(repo, path) {
+      const node = findNodeByPath(get().files, path);
+      if (!node || node.type === 'dir') return false;
+      get().expandParentFolders(repo, path);
+      await get().selectFile(repo, node);
+      return true;
+    },
 
-  toggleFolder(repo, path) {
-    const { expandedIds } = get();
-    const newExpanded = new Set(expandedIds);
+    toggleFolder(repo, path) {
+      const { expandedIds } = get();
+      const newExpanded = new Set(expandedIds);
 
-    if (newExpanded.has(path)) {
-      newExpanded.delete(path);
-    } else {
-      newExpanded.add(path);
+      if (newExpanded.has(path)) {
+        newExpanded.delete(path);
+      } else {
+        newExpanded.add(path);
 
+        const parts = path.split('/');
+        for (let i = 1; i < parts.length; i++) {
+          const parentPath = parts.slice(0, i).join('/');
+          newExpanded.add(parentPath);
+        }
+      }
+
+      set({ expandedIds: newExpanded });
+      saveTreeCache(repo, get());
+    },
+
+    expandParentFolders(repo, path) {
       const parts = path.split('/');
+      if (parts.length <= 1) return;
+
+      const { expandedIds } = get();
+      const newExpanded = new Set(expandedIds);
+
       for (let i = 1; i < parts.length; i++) {
         const parentPath = parts.slice(0, i).join('/');
         newExpanded.add(parentPath);
       }
-    }
 
-    set({ expandedIds: newExpanded });
-    saveTreeCache(repo, get());
-  },
+      const sortedExpanded = new Set([...newExpanded].sort());
+      set({ expandedIds: sortedExpanded });
+      saveTreeCache(repo, get());
+    },
 
-  expandParentFolders(repo, path) {
-    const parts = path.split('/');
-    if (parts.length <= 1) return;
+    getBlobSha(path) {
+      const node = findNodeByPath(get().files, path);
+      return node?.sha ?? null;
+    },
 
-    const { expandedIds } = get();
-    const newExpanded = new Set(expandedIds);
-
-    for (let i = 1; i < parts.length; i++) {
-      const parentPath = parts.slice(0, i).join('/');
-      newExpanded.add(parentPath);
-    }
-
-    const sortedExpanded = new Set([...newExpanded].sort());
-    set({ expandedIds: sortedExpanded });
-    saveTreeCache(repo, get());
-  },
-
-  getBlobSha(path) {
-    const node = findNodeByPath(get().files, path);
-    return node?.sha ?? null;
-  },
-
-  clear() {
-    set(initialState);
-    useContentStore.getState().clear();
-  },
-};});
+    clear() {
+      set(initialState);
+      useContentStore.getState().clear();
+    },
+  };
+});

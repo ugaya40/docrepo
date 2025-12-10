@@ -75,7 +75,17 @@ export const useContentStore = create<ContentStore>((set) => ({
         set({ isLoadingContent: false });
       }
     } catch {
-      set({ content: null, updatedAt: null, isLoadingContent: false });
+      // Fallback to cache ignoring SHA if fetch fails
+      const cached = await cacheService.getContent(repo.fullName, repo.currentBranch, file.path);
+      if (cached) {
+        set({
+          content: cached.content,
+          updatedAt: cached.updatedAt, // Keeping original timestamp
+          isLoadingContent: false,
+        });
+      } else {
+        set({ content: null, updatedAt: null, isLoadingContent: false });
+      }
     }
   },
 
