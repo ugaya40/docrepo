@@ -55,6 +55,9 @@ docRepo was developed with the goal of treating GitHub as your document reposito
     - *Limitation*: Some external web images (e.g., badges) cannot be embedded due to browser security restrictions (CORS).
   - **Recommendation**: Store images for shared documents within your repository whenever possible. This helps ensure a fully self-contained HTML export that requires no network access.
 
+- **Raw Markdown Download**
+  - Download the original Markdown source file.
+
 - **Print / PDF**
   - Printer-friendly styling produces clean PDFs, even from mobile browsers.
   - *iOS/iPadOS Tip*: Tap "Print" in the share sheet, then **pinch out (zoom in)** on the preview page to open and save it as a PDF.

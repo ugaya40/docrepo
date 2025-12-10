@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { ChevronDown, Database, X, Loader2, RefreshCw, GitBranch, FolderGit2 } from 'lucide-react';
+import { ChevronDown, X, Loader2, RefreshCw, GitBranch, FolderGit2 } from 'lucide-react';
 import { useRepoContextStore } from '../../stores/repoContextStore';
 import { useLayoutStore } from '../../stores/layoutStore';
 import { useThemeStore } from '../../stores/themeStore';
@@ -30,9 +30,9 @@ export const SideHeader: React.FC = () => {
   return (
     <div className={`p-4 border-b backdrop-blur sticky top-0 z-10 ${isLight ? 'border-(--color-border) bg-(--color-bg-secondary)/95' : 'border-slate-800 bg-slate-900/95'}`}>
       <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-8">
           <h2 className={`text-lg font-bold flex items-center gap-2 ${isLight ? 'text-(--color-text-primary)' : 'text-white'}`}>
-            <Database size={20} className="text-indigo-500" />
+            <img src="/cap.png" alt="docRepo" className="w-9 h-9 object-contain" />
             docRepo
           </h2>
           <ThemeSelector />

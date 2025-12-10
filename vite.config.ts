@@ -32,8 +32,8 @@ export default defineConfig({
         name: 'docRepo',
         short_name: 'docRepo',
         description: 'GitHub Repository Markdown Viewer',
-        theme_color: '#020617',
-        background_color: '#020617',
+        theme_color: '#ffffff',
+        background_color: '#ffffff',
         display: 'standalone',
         icons: [
           {
