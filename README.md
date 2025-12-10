@@ -1,7 +1,7 @@
-# docRepo　[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+# docRepo [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 
-https://docrepo.pages.dev/
+https://docrepo.online/
 
 A web application (PWA) for comfortably viewing and sharing **Markdown files on GitHub, including private repositories**, even on mobile devices.
 
@@ -63,7 +63,7 @@ docRepo was developed with the goal of treating GitHub as your document reposito
 
 ## Usage
 
-Visit **[https://docrepo.pages.dev/](https://docrepo.pages.dev/)**
+Visit **[https://docrepo.online/](https://docrepo.online/)**
 
 1. Click **Sign in with GitHub**
 2. Authenticate with your GitHub account (requests read access to private repositories)
