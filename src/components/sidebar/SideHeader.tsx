@@ -1,18 +1,19 @@
 import { useEffect } from 'react';
-import { ChevronDown, X, Loader2, RefreshCw, GitBranch, FolderGit2 } from 'lucide-react';
+import { X, Loader2, RefreshCw, GitBranch, FolderGit2 } from 'lucide-react';
 import { useRepoContextStore } from '../../stores/repoContextStore';
 import { useLayoutStore } from '../../stores/layoutStore';
 import { useThemeStore } from '../../stores/themeStore';
 import { ThemeSelector } from './ThemeSelector';
 import { RepoCombobox } from './RepoCombobox';
+import { BranchCombobox } from './BranchCombobox';
 
 export const SideHeader: React.FC = () => {
 
-  const branches = useRepoContextStore((s) => s.branches);
+
   const selectedRepo = useRepoContextStore((s) => s.selectedRepo);
   const isLoadingRepos = useRepoContextStore((s) => s.isLoadingRepos);
   const isLoadingBranches = useRepoContextStore((s) => s.isLoadingBranches);
-  const { loadRepos, loadBranches, selectBranch } = useRepoContextStore.getState();
+  const { loadRepos, loadBranches } = useRepoContextStore.getState();
   const closeSidebar = useLayoutStore.getState().closeSidebar;
   const theme = useThemeStore((s) => s.theme);
 
@@ -80,19 +81,7 @@ export const SideHeader: React.FC = () => {
               </div>
             ) : (
               <>
-                <select
-                  aria-label="Select branch"
-                  className={`w-full border text-sm rounded-lg p-2 focus:ring-indigo-500 focus:border-indigo-500 appearance-none cursor-pointer transition-colors ${isLight ? 'bg-white border-slate-300 text-slate-700 hover:bg-slate-100' : 'bg-slate-950 border-slate-700 text-slate-200 hover:bg-slate-800'}`}
-                  value={selectedRepo.currentBranch}
-                  onChange={(e) => selectBranch(e.target.value)}
-                >
-                  {branches.map((branch) => (
-                    <option key={branch} value={branch}>{branch}</option>
-                  ))}
-                </select>
-                <div className={`pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 ${isLight ? 'text-slate-500' : 'text-slate-400'}`}>
-                  <ChevronDown size={14} />
-                </div>
+                <BranchCombobox />
               </>
             )}
           </div>
