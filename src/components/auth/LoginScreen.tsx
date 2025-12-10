@@ -1,4 +1,4 @@
-import { Database } from 'lucide-react';
+// import { Database } from 'lucide-react';
 import { SiGithub } from '@icons-pack/react-simple-icons';
 import { useAuthStore } from '../../stores/authStore';
 import { useThemeStore } from '../../stores/themeStore';
@@ -12,13 +12,11 @@ export const LoginScreen: React.FC = () => {
     <div className={`min-h-screen flex items-center justify-center p-4 ${isLight ? 'bg-slate-100' : 'bg-slate-950'}`}>
       <div className={`w-full max-w-md border rounded-2xl p-8 shadow-2xl text-center ${isLight ? 'bg-white border-slate-200' : 'bg-slate-900 border-slate-800'}`}>
         <div className="flex justify-center mb-6">
-          <div className="w-16 h-16 bg-indigo-500 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/20">
-            <Database size={32} className="text-white" />
-          </div>
+          <img src="/cap.png" alt="docRepo" className="w-25 h-25 object-contain drop-shadow-xl" />
         </div>
         <h1 className={`text-3xl font-bold mb-2 tracking-tight ${isLight ? 'text-slate-800' : 'text-white'}`}>docRepo</h1>
         <p className={`mb-8 ${isLight ? 'text-slate-500' : 'text-slate-400'}`}>
-          A GitHub Markdown viewer with math, Mermaid diagrams, and private repo support
+          GitHub Markdown viewer PWA with KaTeX, Mermaid, private repos & one-click single-file HTML export for mobile/offline sharing.
         </p>
 
         <button
