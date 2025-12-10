@@ -52,7 +52,7 @@ export const TreeNode: React.FC<TreeNodeProps> = ({
         aria-expanded={node.type === 'dir' ? isExpanded : undefined}
         aria-selected={isSelected}
         className={`
-          flex items-center py-3 pr-4 cursor-pointer text-sm transition-colors duration-200 outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-inset
+          flex items-center py-3 pr-4 cursor-pointer text-sm transition-colors duration-200 outline-none focus:ring-1 focus:ring-indigo-500/40 focus:ring-inset
           ${isSelected ? selectedClass : defaultClass}
         `}
         style={{ paddingLeft }}
