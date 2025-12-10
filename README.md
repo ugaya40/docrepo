@@ -16,15 +16,16 @@ A key feature is the ability to export documents as a **single, self-contained H
 ## Motivation
 
 The official GitHub mobile app struggles with rendering LaTeX math formulas and Mermaid syntax.
-While powerful, I find Obsidian a bit heavy for quick mobile viewing.
+
+Obsidian-like tools are not a good fit for my use case.[^obsidian]
+
 Notion's export process is cumbersome, making it less ideal for iteratively refining ideas with AI assistants like ChatGPT or Gemini.
 
 GitHub also offers the most convenient version history management.
 
 docRepo was developed with the goal of treating GitHub as your document repository (Single Source of Truth), allowing you to **show documents to someone and discuss them** with the same rich rendering as on PC even when you're out, and to **share them securely on the spot**.
 
-<sub>Many features were developed together with [Claude Code](https://claude.ai/code)</sub>
-
+[^obsidian]: Obsidian is often described as a “second brain”, but I’m skeptical of that idea. When you have only a few notes, manually created links don’t add much value; when you have many notes, maintaining those links becomes painful and inevitably inaccurate. The number of potential link candidates grows as O(N²), which is basically **manual attention**.
 
 ## Key Features
 
@@ -35,7 +36,7 @@ docRepo was developed with the goal of treating GitHub as your document reposito
   - **Full GFM Support**: Tables, task lists, GitHub-specific alert syntax (Note, Warning, etc.)
   - **Syntax Highlighting**: Code highlighting for multiple languages
 - **API Rate Limit Visibility**: Always see your remaining GitHub API calls.
-- **Dark/Light Mode**: Theme switching available
+- **Dark/Light Mode**: Follows your OS theme by default, with manual switching available.
 ![LightMode](screenshots/main-light.png)
 
 | Mermaid Diagram | Math & Alerts |
