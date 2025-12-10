@@ -26,12 +26,10 @@ export const DownloadAsMarkdownButton: React.FC<DownloadAsMarkdownButtonProps> =
     setIsDownloading(true);
 
     try {
-      // Create blob from content
       const blob = new Blob([content], { type: 'text/markdown' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      // Ensure it ends with .md
       a.download = selectedFile.name.endsWith('.md')
         ? selectedFile.name
         : `${selectedFile.name}.md`;

@@ -1,4 +1,3 @@
-// import { Database } from 'lucide-react';
 import { SiGithub } from '@icons-pack/react-simple-icons';
 import { useAuthStore } from '../../stores/authStore';
 import { useThemeStore } from '../../stores/themeStore';
