@@ -11,7 +11,7 @@ A key feature is the ability to export documents as a **single, self-contained H
 
 **Completely read-only**, displaying only .md files. (The tree is displayed with Compact Folders for better navigation)
 
-![docRepo Main Screen](screenshots/main-dark.png)
+![docRepo Main Screen](screenshots/dark.png)
 
 ## Motivation
 
@@ -37,13 +37,11 @@ docRepo was developed with the goal of treating GitHub as your document reposito
   - **Syntax Highlighting**: Code highlighting for multiple languages
 - **API Rate Limit Visibility**: Always see your remaining GitHub API calls.
 - **Dark/Light Mode**: Follows your OS theme by default, with manual switching available.
-![LightMode](screenshots/main-light.png)
-
-| Mermaid Diagram | Math & Alerts |
-| :---: | :---: |
-| ![Mermaid](screenshots/light-m.png) | ![Math](screenshots/light-t.png) |
+![LightMode](screenshots/light.png)
 
 ### Mobile & Offline Support
+
+![Mobile](screenshots/mobile.png)
 - **PWA (Progressive Web App)**: Add to home screen and use like a native app
 - **Smart Caching**: Repository structures and files are cached in IndexedDB upon viewing, ensuring fast access even when offline or on unstable networks (on a best-effort basis)
 
