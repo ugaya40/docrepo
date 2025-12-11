@@ -40,11 +40,12 @@ npm run preview
 - **GitHub API**: Octokit
 - **Markdown**: react-markdown + remark-gfm + remark-math + remark-github-blockquote-alert + remark-emoji
 - **Diagram**: mermaid
-- **Rehype**: rehype-raw + rehype-katex + rehype-highlight
+- **Rehype**: rehype-raw + rehype-katex + rehype-highlight + rehype-slug
 - **Icons**: lucide-react + @icons-pack/react-simple-icons
 - **Device Detection**: react-device-detect
 - **Storage**: idb-keyval
 - **Toast**: sonner
+- **Lightbox**: yet-another-react-lightbox
 - **PWA**: vite-plugin-pwa
 - **Linter**: ESLint 9 + typescript-eslint
 

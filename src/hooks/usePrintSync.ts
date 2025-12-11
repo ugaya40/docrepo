@@ -55,4 +55,7 @@ function cleanPrintClone(element: HTMLElement) {
   if (element.classList.contains('prose-invert')) {
     element.classList.remove('prose-invert');
   }
+  if (element.classList.contains('animate-content-fadeIn')) {
+    element.classList.remove('animate-content-fadeIn');
+  }
 }

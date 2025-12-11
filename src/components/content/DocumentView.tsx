@@ -8,6 +8,7 @@ import remarkEmoji from 'remark-emoji';
 import rehypeKatex from 'rehype-katex';
 import rehypeHighlight from 'rehype-highlight';
 import rehypeRaw from 'rehype-raw';
+import rehypeSlug from 'rehype-slug';
 import 'katex/dist/katex.min.css';
 import { useFileTreeStore } from '../../stores/fileTreeStore';
 import { useContentStore } from '../../stores/contentStore';
@@ -55,12 +56,12 @@ export const DocumentView: React.FC = () => {
   }
 
   return (
-    <div className="max-w-3xl mx-auto w-full animate-content-fadeIn">
+    <div id="document-content" className="max-w-3xl mx-auto w-full animate-content-fadeIn">
       <div className={`prose max-w-none w-full ${isLight ? '' : 'prose-invert'}`}>
         {selectedFile.name.toLowerCase().endsWith('.md') ? (
           <Markdown
             remarkPlugins={[remarkGfm, remarkMath, remarkAlert, remarkEmoji]}
-            rehypePlugins={[rehypeRaw, rehypeKatex, rehypeHighlight]}
+            rehypePlugins={[rehypeRaw, rehypeKatex, rehypeHighlight, rehypeSlug]}
             components={components}>
             {content ?? ''}
           </Markdown>

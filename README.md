@@ -95,10 +95,11 @@ A setup guide for those who want to host their own instance. As a static SPA (Si
 - **State Management**: Zustand (with persistence)
 - **Auth**: Supabase Auth (GitHub OAuth)
 - **API**: Octokit
-- **Markdown Stack**: react-markdown, remark-gfm, remark-math, remark-emoji, remark-github-blockquote-alert, rehype-raw, rehype-katex, rehype-highlight
+- **Markdown Stack**: react-markdown, remark-gfm, remark-math, remark-emoji, remark-github-blockquote-alert, rehype-raw, rehype-katex, rehype-highlight, rehype-slug
 - **Diagram**: Mermaid.js
-- **Icons**: lucide-react
+- **Icons**: lucide-react, @icons-pack/react-simple-icons
 - **Toast**: sonner
+- **Lightbox**: yet-another-react-lightbox
 - **Cache**: idb-keyval (IndexedDB)
 - **PWA**: vite-plugin-pwa
 
