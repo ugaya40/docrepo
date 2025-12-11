@@ -63,8 +63,8 @@ export const MermaidRenderer: React.FC<MermaidRendererProps> = ({ chart }) => {
 };
 
 function processSvg(svg: string): string {
-  const maxWidthMatch = svg.match(/style="[^"]*max-width:\s*([^;\"]+)/);
+  const maxWidthMatch = svg.match(/style="[^"]*max-width:\s*([^;"]+)/);
   const maxWidth = maxWidthMatch ? maxWidthMatch[1].trim() : undefined;
-  let fixedSvg = maxWidth ? svg.replace(/width="100%"/, `width="${maxWidth}"`) : svg;
+  const fixedSvg = maxWidth ? svg.replace(/width="100%"/, `width="${maxWidth}"`) : svg;
   return fixedSvg.replace(/(<svg[^>]*style=")/, '$1display: inline-block; ');
 }

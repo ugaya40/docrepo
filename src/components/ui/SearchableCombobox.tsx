@@ -51,6 +51,7 @@ export function SearchableCombobox<T>({
     const handleClickOutside = (event: MouseEvent) => {
       if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
         setIsOpen(false);
+        setSearchQuery('');
       }
     };
 
@@ -65,14 +66,12 @@ export function SearchableCombobox<T>({
     if (isOpen && inputRef.current) {
       inputRef.current.focus();
     }
-    if (!isOpen) {
-      setSearchQuery('');
-    }
   }, [isOpen]);
 
   const handleSelect = (item: T) => {
     onSelect(item);
     setIsOpen(false);
+    setSearchQuery('');
   };
 
   if (isLoading) {
@@ -89,7 +88,10 @@ export function SearchableCombobox<T>({
       {/* Trigger Button */}
       <button
         type="button"
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={() => {
+          if (isOpen) setSearchQuery('');
+          setIsOpen(!isOpen);
+        }}
         className={`
           w-full border text-sm rounded-lg p-2 flex items-center justify-between
           focus:outline-none focus:ring-2 focus:ring-indigo-500

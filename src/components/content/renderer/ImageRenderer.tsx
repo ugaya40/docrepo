@@ -37,6 +37,7 @@ const setImageCache = async (sha: string, cache: CachedImage) => {
 };
 
 export const ImageRenderer = (props: React.ComponentProps<'img'> & ExtraProps) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { src, node, ...otherProps } = props;
   const [imgSrc, setImgSrc] = useState<string | undefined>(undefined);
   const [loading, setLoading] = useState(true);

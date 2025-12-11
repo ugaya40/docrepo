@@ -4,7 +4,7 @@ import mermaid from 'mermaid';
 import { generateMermaidId, wrapWithMermaidTheme } from '../utils/mermaidUtils';
 
 const svgToBase64Img = (svg: string): Element => {
-  const maxWidthMatch = svg.match(/style="[^"]*max-width:\s*([^;\"]+)/);
+  const maxWidthMatch = svg.match(/style="[^"]*max-width:\s*([^;"]+)/);
   const maxWidth = maxWidthMatch ? maxWidthMatch[1].trim() : undefined;
 
   let fixedSvg = svg;
