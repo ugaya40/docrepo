@@ -25,7 +25,17 @@ export const MainApp: React.FC = () => {
 
   useEffect(() => {
     initSidebarByWidth();
-    const handleResize = () => initSidebarByWidth();
+
+    let prevWidth = window.innerWidth;
+    const handleResize = () => {
+      const currentWidth = window.innerWidth;
+      // Only react to width changes (ignore height changes e.g. mobile keyboard)
+      if (currentWidth !== prevWidth) {
+        initSidebarByWidth();
+        prevWidth = currentWidth;
+      }
+    };
+
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
