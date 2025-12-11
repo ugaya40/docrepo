@@ -39,9 +39,14 @@ export const useAuthStore = create<AuthStore>()(
       },
 
       async logout() {
-        await supabase.auth.signOut();
-        clearOctokit();
-        set({ isLoggedIn: false, user: null, session: null, providerToken: null });
+        try {
+          await supabase.auth.signOut();
+        }
+        finally {
+          clearOctokit();
+          localStorage.removeItem('auth-storage'); // Force clear persistence
+          set({ isLoggedIn: false, user: null, session: null, providerToken: null });
+        }
       },
 
       async initialize() {
@@ -51,25 +56,20 @@ export const useAuthStore = create<AuthStore>()(
         const persistedToken = get().providerToken;
         const token = session?.provider_token ?? persistedToken;
 
-        if (session && token) {
+        if (token) {
           initOctokit(token);
           set({
             isLoggedIn: true,
-            user: session.user,
-            session,
+            user: session?.user ?? get().user,
+            session: session ?? null,
             providerToken: token,
             isLoading: false,
           });
         } else {
-          if (session) {
-            await supabase.auth.signOut();
-          }
           clearOctokit();
           set({
             isLoggedIn: false,
-            user: null,
             session: null,
-            providerToken: null,
             isLoading: false,
           });
         }
@@ -77,7 +77,7 @@ export const useAuthStore = create<AuthStore>()(
     }),
     {
       name: 'auth-storage',
-      partialize: (state) => ({ providerToken: state.providerToken }),
+      partialize: (state) => ({ providerToken: state.providerToken, user: state.user }),
       onRehydrateStorage: () => {
         return (state, error) => {
           if (!error && state) {

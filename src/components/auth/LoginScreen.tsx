@@ -1,11 +1,13 @@
 import { SiGithub } from '@icons-pack/react-simple-icons';
 import { useAuthStore } from '../../stores/authStore';
 import { useThemeStore } from '../../stores/themeStore';
+import { useOnline } from '../../hooks/useOnline';
 
 export const LoginScreen: React.FC = () => {
   const login = useAuthStore((s) => s.login);
   const theme = useThemeStore((s) => s.theme);
   const isLight = theme === 'light';
+  const isOnline = useOnline();
 
   return (
     <div className={`min-h-screen flex items-center justify-center p-4 ${isLight ? 'bg-slate-100' : 'bg-slate-950'}`}>
@@ -20,10 +22,13 @@ export const LoginScreen: React.FC = () => {
 
         <button
           onClick={login}
-          className="w-full py-3 px-4 bg-slate-800 hover:bg-slate-700 text-white font-medium rounded-lg transition-all duration-200 flex items-center justify-center gap-3 border border-slate-700 group"
+          disabled={!isOnline}
+          className={`w-full py-3 px-4 text-white font-medium rounded-lg transition-all duration-200 flex items-center justify-center gap-3 border border-slate-700 group
+             ${!isOnline ? 'bg-slate-600 cursor-not-allowed opacity-50' : 'bg-slate-800 hover:bg-slate-700'}
+          `}
         >
           <SiGithub size={20} className="text-white group-hover:scale-110 transition-transform" />
-          <span>Sign in with GitHub</span>
+          <span>{isOnline ? 'Sign in with GitHub' : 'Offline'}</span>
         </button>
       </div>
     </div>
