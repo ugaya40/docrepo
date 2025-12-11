@@ -1,11 +1,11 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useMemo } from "react";
 import { get as idbGet, set as idbSet } from 'idb-keyval';
 import Lightbox from "yet-another-react-lightbox";
 import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import "yet-another-react-lightbox/styles.css";
 
 import { useRepoContextStore } from "../../../stores/repoContextStore";
-import { useFileTreeStore } from "../../../stores/fileTreeStore";
+import { useFileTreeStore, findNodeByPath } from "../../../stores/fileTreeStore";
 import { githubApi } from "../../../lib/github";
 import { resolvePath } from "./resolvePath";
 import type { ExtraProps } from "react-markdown";
@@ -44,12 +44,26 @@ export const ImageRenderer = (props: React.ComponentProps<'img'> & ExtraProps) =
   const objectUrlRef = useRef<string | null>(null);
   const loadedShaRef = useRef<string | null>(null);
 
+  const selectedRepo = useRepoContextStore(s => s.selectedRepo);
+  const selectedFile = useFileTreeStore(s => s.selectedFile);
+
+  // Compute the target path for the image
+  const targetPath = useMemo(() => {
+    if (!src || !selectedFile) return null;
+    if (src.startsWith('http') || src.startsWith('data:')) return null;
+    return resolvePath(selectedFile.path, src);
+  }, [src, selectedFile]);
+
+  // Subscribe to the SHA of the target file
+  const sha = useFileTreeStore(s => {
+    if (!targetPath) return null;
+    return findNodeByPath(s.files, targetPath)?.sha ?? null;
+  });
+
   useEffect(() => {
     let isMounted = true;
 
-    const selectedRepo = useRepoContextStore.getState().selectedRepo;
-    const selectedFile = useFileTreeStore.getState().selectedFile;
-    if (!src || !selectedRepo || !selectedFile) return;
+    if (!src) return;
 
     if (src.startsWith('http') || src.startsWith('data:')) {
       setImgSrc(src);
@@ -57,20 +71,22 @@ export const ImageRenderer = (props: React.ComponentProps<'img'> & ExtraProps) =
       return;
     }
 
+    if (!selectedRepo || !targetPath || !sha) {
+      if (isMounted && targetPath) {
+        // Only log if we have a target path but found no SHA (file not in tree yet)
+        // If it's still loading initially, this might be temporary.
+        console.warn('Image not found in tree or tree not ready:', targetPath);
+      }
+      return;
+    }
+
+    // If we have already loaded this exact SHA, don't reload
+    if (sha === loadedShaRef.current) {
+      setLoading(false);
+      return;
+    }
+
     const fetchImage = async () => {
-      const targetPath = resolvePath(selectedFile.path, src);
-      const sha = useFileTreeStore.getState().getBlobSha(targetPath);
-
-      if (!sha) {
-        if (isMounted) console.error('Image not found in tree:', targetPath);
-        return;
-      }
-
-      if (sha === loadedShaRef.current) {
-        setLoading(false);
-        return;
-      }
-
       loadedShaRef.current = sha;
       setLoading(true);
 
@@ -112,7 +128,7 @@ export const ImageRenderer = (props: React.ComponentProps<'img'> & ExtraProps) =
     return () => {
       isMounted = false;
     };
-  }, [src]);
+  }, [src, selectedRepo, targetPath, sha]);
 
   useEffect(() => {
     return () => {

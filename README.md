@@ -35,6 +35,7 @@ docRepo was developed with the goal of treating GitHub as your document reposito
   - **Diagrams**: Flowcharts, sequence diagrams, and more with Mermaid syntax
   - **Full GFM Support**: Tables, task lists, GitHub-specific alert syntax (Note, Warning, etc.)
   - **Syntax Highlighting**: Code highlighting for multiple languages
+  - **Table of Contents**: Auto-generated handy Table of Contents
 - **API Rate Limit Visibility**: Always see your remaining GitHub API calls.
 - **Dark/Light Mode**: Follows your OS theme by default, with manual switching available.
 ![LightMode](screenshots/light.png)

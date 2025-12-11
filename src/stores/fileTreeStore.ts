@@ -68,7 +68,7 @@ const buildFileTree = (items: GitTreeItem[]): FileNode[] => {
   return roots;
 };
 
-const findNodeByPath = (nodes: FileNode[], path: string): FileNode | null => {
+export const findNodeByPath = (nodes: FileNode[], path: string): FileNode | null => {
   for (const node of nodes) {
     if (node.path === path) return node;
     if (node.children) {
