@@ -40,6 +40,19 @@ export const MainApp: React.FC = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+
+  // Global event listener to disable native browser zoom (Ctrl + Wheel)
+  useEffect(() => {
+    const handleGlobalWheel = (e: WheelEvent) => {
+      if (e.ctrlKey || e.metaKey) {
+        e.preventDefault();
+      }
+    };
+
+    window.addEventListener('wheel', handleGlobalWheel, { passive: false });
+    return () => window.removeEventListener('wheel', handleGlobalWheel);
+  }, []);
+
   useEffect(() => {
     const id = 'hljs-theme';
     let link = document.getElementById(id) as HTMLLinkElement | null;

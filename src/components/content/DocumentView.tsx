@@ -12,9 +12,9 @@ import 'katex/dist/katex.min.css';
 import { useFileTreeStore } from '../../stores/fileTreeStore';
 import { useContentStore } from '../../stores/contentStore';
 import { useThemeStore } from '../../stores/themeStore';
-import { ImageRenderer } from './renderer/ImageRenderer';
 import { LinkRenderer } from './renderer/LinkRenderer';
 import { CodeRenderer } from './renderer/CodeRenderer';
+import { ImageRenderer } from './renderer/ImageRenderer';
 
 export const DocumentView: React.FC = () => {
   const selectedFile = useFileTreeStore((s) => s.selectedFile);
@@ -56,7 +56,7 @@ export const DocumentView: React.FC = () => {
 
   return (
     <div className="max-w-3xl mx-auto w-full animate-content-fadeIn">
-      <div id="document-content" className={`prose max-w-none ${isLight ? '' : 'prose-invert'}`}>
+      <div className={`prose max-w-none w-full ${isLight ? '' : 'prose-invert'}`}>
         {selectedFile.name.toLowerCase().endsWith('.md') ? (
           <Markdown
             remarkPlugins={[remarkGfm, remarkMath, remarkAlert, remarkEmoji]}

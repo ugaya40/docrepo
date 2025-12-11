@@ -1,5 +1,9 @@
 import { useEffect, useState, useRef } from "react";
 import { get as idbGet, set as idbSet } from 'idb-keyval';
+import Lightbox from "yet-another-react-lightbox";
+import Zoom from "yet-another-react-lightbox/plugins/zoom";
+import "yet-another-react-lightbox/styles.css";
+
 import { useRepoContextStore } from "../../../stores/repoContextStore";
 import { useFileTreeStore } from "../../../stores/fileTreeStore";
 import { githubApi } from "../../../lib/github";
@@ -36,6 +40,7 @@ export const ImageRenderer = (props: React.ComponentProps<'img'> & ExtraProps) =
   const { src, node, ...otherProps } = props;
   const [imgSrc, setImgSrc] = useState<string | undefined>(undefined);
   const [loading, setLoading] = useState(true);
+  const [open, setOpen] = useState(false);
   const objectUrlRef = useRef<string | null>(null);
   const loadedShaRef = useRef<string | null>(null);
 
@@ -126,10 +131,23 @@ export const ImageRenderer = (props: React.ComponentProps<'img'> & ExtraProps) =
   }
 
   return (
-    <img
-      src={imgSrc || ''}
-      {...otherProps}
-      className="!inline max-w-full h-auto"
-    />
+    <>
+      <img
+        src={imgSrc || ''}
+        {...otherProps}
+        className="!inline max-w-full h-auto cursor-zoom-in"
+        onClick={() => setOpen(true)}
+      />
+      <Lightbox
+        open={open}
+        close={() => setOpen(false)}
+        slides={[{ src: imgSrc || '', alt: otherProps.alt }]}
+        plugins={[Zoom]}
+        render={{
+          buttonPrev: () => null,
+          buttonNext: () => null,
+        }}
+      />
+    </>
   );
 };
