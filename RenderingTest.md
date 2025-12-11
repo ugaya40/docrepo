@@ -64,36 +64,7 @@ def factorial(n):
 
 ---
 
-## 3. Mathematical Formulas (KaTeX)
-
-**Inline formula:**
-Einstein's equation is $E = mc^2$.
-
-**Display formula:**
-$$
-f(x) = \int_{-\infty}^\infty \hat f(\xi)\,e^{2\pi i \xi x} \,d\xi
-$$
-
----
-
-## 4. HTML Support (rehype-raw)
-
-Testing layout adjustments using HTML tags.
-
-<div align="center">
-  <p>This text is centered using <code>&lt;div align="center"&gt;</code>.</p>
-  <p><b>Bold text using HTML tags</b> also works.</p>
-</div>
-
-<details>
-<summary>Click to expand (details/summary tags)</summary>
-<br>
-Hidden content is now displayed.
-</details>
-
----
-
-## 5. GitHub Alerts
+## 3. GitHub Alerts
 
 > [!NOTE]
 > **Note**: Supplementary information or context that users should be aware of.
@@ -112,7 +83,19 @@ Hidden content is now displayed.
 
 ---
 
-## 6. Mermaid Diagrams
+## 4. Mathematical Formulas (KaTeX)
+
+**Inline formula:**
+Einstein's equation is $E = mc^2$.
+
+**Display formula:**
+$$
+f(x) = \int_{-\infty}^\infty \hat f(\xi)\,e^{2\pi i \xi x} \,d\xi
+$$
+
+---
+
+## 5. Mermaid Diagrams
 
 ### Flowchart (Left to Right)
 ```mermaid
@@ -147,7 +130,7 @@ classDiagram
 
 ---
 
-## 7. Emoji Shortcodes
+## 6. Emoji Shortcodes
 
 GitHub-style shortcodes are converted to emojis.
 
@@ -157,6 +140,23 @@ GitHub-style shortcodes are converted to emojis.
 | `:tada:` | :tada: | `:warning:` | :warning: |
 | `:+1:` | :+1: | `:heart:` | :heart: |
 | `:fire:` | :fire: | `:checkered_flag:` | :checkered_flag: |
+
+---
+
+## 7. HTML Support (rehype-raw)
+
+Testing layout adjustments using HTML tags.
+
+<div align="center">
+  <p>This text is centered using <code>&lt;div align="center"&gt;</code>.</p>
+  <p><b>Bold text using HTML tags</b> also works.</p>
+</div>
+
+<details>
+<summary>Click to expand (details/summary tags)</summary>
+<br>
+Hidden content is now displayed.
+</details>
 
 ---
 
