@@ -73,11 +73,6 @@ export const ImageRenderer = (props: React.ComponentProps<'img'> & ExtraProps) =
     }
 
     if (!selectedRepo || !targetPath || !sha) {
-      if (isMounted && targetPath) {
-        // Only log if we have a target path but found no SHA (file not in tree yet)
-        // If it's still loading initially, this might be temporary.
-        console.warn('Image not found in tree or tree not ready:', targetPath);
-      }
       return;
     }
 
