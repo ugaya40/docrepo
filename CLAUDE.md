@@ -41,7 +41,9 @@ npm run preview
 - **Markdown**: react-markdown + remark-gfm + remark-math + remark-github-blockquote-alert + remark-emoji
 - **Diagram**: mermaid
 - **Rehype**: rehype-raw + rehype-katex + rehype-highlight
-- **Icons**: lucide-react
+- **Icons**: lucide-react + @icons-pack/react-simple-icons
+- **Device Detection**: react-device-detect
+- **Storage**: idb-keyval
 - **Toast**: sonner
 - **PWA**: vite-plugin-pwa
 - **Linter**: ESLint 9 + typescript-eslint

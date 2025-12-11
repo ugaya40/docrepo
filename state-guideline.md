@@ -160,3 +160,16 @@ The following are **absolutely prohibited**:
     * `set({ foo: ... })` from components is prohibited. Always go through store actions.
 * **Handling Non-Component-Local State with useState**
     * Do not put state that should be shared in `useState`.
+
+---
+
+## 6. Advanced: Dynamic State Pattern
+
+Zustand is primarily a "persistent singleton" state manager and lacks a standard way to handle **application-specific volatile (ephemeral) state**.
+However, since managing state that exists only for a specific duration (session, screen lifecycle) is essential, this project uses the **Dynamic State Pattern**.
+
+### 1. Component Lifecycle State (`useDefineDynamicState`)
+Use this when you have **volatile state (e.g., Modals, Wizards) and want to share it with descendant components**. It avoids prop drilling while ensuring the state is automatically cleaned up when the component is destroyed.
+
+### 2. Session Lifecycle State (`createDynamicStore` / `removeDynamicStore`)
+Use this when you need to explicitly reset or destroy state for temporary sessions, such as "Content Rendering".
