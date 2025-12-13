@@ -1,9 +1,24 @@
-import { useState, useRef, useEffect, lazy, Suspense } from 'react';
+import { useState, useRef, useEffect, lazy, Suspense, isValidElement } from 'react';
+import type { ReactNode, ReactElement } from 'react';
 import { Copy, Check } from 'lucide-react';
 
 const MermaidRenderer = lazy(() =>
   import('./MermaidRenderer').then((m) => ({ default: m.MermaidRenderer }))
 );
+
+const extractTextFromChildren = (children: ReactNode): string => {
+  if (typeof children === 'string' || typeof children === 'number') {
+    return String(children);
+  }
+  if (Array.isArray(children)) {
+    return children.map(extractTextFromChildren).join('');
+  }
+  if (isValidElement(children)) {
+    const element = children as ReactElement<{ children?: ReactNode }>;
+    return extractTextFromChildren(element.props.children);
+  }
+  return '';
+};
 
 export const CodeRenderer = (props: React.ComponentProps<'code'>) => {
   const { children, className, ...rest } = props;
@@ -36,7 +51,7 @@ export const CodeRenderer = (props: React.ComponentProps<'code'>) => {
   }
 
   if (isBlock) {
-    const code = String(children).replace(/\n$/, '');
+    const code = extractTextFromChildren(children).replace(/\n$/, '');
 
     const handleCopy = async () => {
       await navigator.clipboard.writeText(code);
