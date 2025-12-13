@@ -67,16 +67,16 @@ export const ShareActions: React.FC = () => {
                 onDownloadStart={() => setShowMenu(false)}
                 onDownloadEnd={() => { }}
               />
-              <DownloadAsMarkdownButton
-                onDownloadStart={() => setShowMenu(false)}
-                onDownloadEnd={() => { }}
-              />
               {isMobile && (
                 <ShareAsHtmlButton
                   onShareStart={() => setShowMenu(false)}
                   onShareEnd={() => { }}
                 />
               )}
+              <DownloadAsMarkdownButton
+                onDownloadStart={() => setShowMenu(false)}
+                onDownloadEnd={() => { }}
+              />
             </>
           )}
           <PrintButton />
