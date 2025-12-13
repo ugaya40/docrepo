@@ -5,7 +5,7 @@ import { VitePWA } from 'vite-plugin-pwa'
 import packageJson from './package.json'
 
 // https://vite.dev/config/
-export default defineConfig(({ mode }) => {
+export default defineConfig(() => {
   const basePath = process.env.VITE_BASE_PATH || '/';
 
   return {
