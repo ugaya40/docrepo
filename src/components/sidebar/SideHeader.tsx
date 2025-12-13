@@ -34,7 +34,7 @@ export const SideHeader: React.FC = () => {
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-8">
           <h2 className={`text-lg font-bold flex items-center gap-2 ${isLight ? 'text-(--color-text-primary)' : 'text-white'}`}>
-            <img src="/cap.png" alt="docRepo" className="w-9 h-9 object-contain" />
+            <img src={`${import.meta.env.BASE_URL}cap.png`} alt="docRepo" className="w-9 h-9 object-contain" />
             docRepo
           </h2>
           <ThemeSelector />

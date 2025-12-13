@@ -40,20 +40,20 @@ docRepo was developed with the goal of treating GitHub as your document reposito
 - **Dark/Light Mode**: Follows your OS theme by default, with manual switching available.
 ![LightMode](screenshots/light.png)
 
-### Mobile & Offline Support
+### Mobile Support
 
 ![Mobile](screenshots/mobile.png)
 - **PWA (Progressive Web App)**: Add to home screen and use like a native app
-- **Smart Caching**: Repository structures and files are cached in IndexedDB upon viewing, ensuring fast access even when offline or on unstable networks (on a best-effort basis)
+- **Smart Caching**: Repository structures and files are cached in IndexedDB upon viewing, enabling viewing while minimizing network access.
 
 ### Export & Sharing
 
 - **Single HTML Export (Portable & Offline-viewable)**
   - Creates a single, standalone HTML file that works entirely offline. Perfect for sharing via email or chat, similar to a PDF.
   - **Zero External Dependencies**: Diagrams (Mermaid) are pre-rendered to SVG, and formulas (KaTeX) include embedded CSS and fonts—no network access required.
-  - **Smart Image Embedding**: Images from your GitHub repositories, including private repositories, are automatically embedded.
+  - **Smart Image Embedding**: Images are automatically embedded into the HTML. This includes content from private GitHub repositories.
     - *Limitation*: Some external web images (e.g., badges) cannot be embedded due to browser security restrictions (CORS).
-  - **Recommendation**: Store images for shared documents within your repository whenever possible. This helps ensure a fully self-contained HTML export that requires no network access.
+    - **Recommendation**: Store images for shared documents within your repository whenever possible. This helps ensure a fully self-contained HTML export that requires no network access.
 
 - **Raw Markdown Download**
   - Download the original Markdown source file.
@@ -70,7 +70,7 @@ Visit **[https://docrepo.online/](https://docrepo.online/)**
 
 1. Click **Sign in with GitHub**
 2. Authenticate with your GitHub account (requests read access to private repositories)
-3. Select a repository from the left sidebar
+3. Select a repository and branch from the left sidebar
 4. Select a Markdown file from the folder tree to view
 
 ## Privacy & Security
@@ -168,15 +168,12 @@ Deploy the generated `dist` directory to any static hosting service.
 
 When deploying to a subdirectory like GitHub Pages (`https://<username>.github.io/docRepo/`), the following configuration changes are required:
 
-1. **`vite.config.ts` Configuration**
-   Set the `base` option to match your repository name.
-   ```ts
-   export default defineConfig({
-     base: '/docRepo/', // repository name
-     plugins: [react(), ...],
-     // ...
-   })
+1. **Base Path Configuration**
+   Set the `VITE_BASE_PATH` environment variable when building.
+   ```bash
+   VITE_BASE_PATH=/docRepo/ npm run build
    ```
+   (Or configure this variable in your CI/CD settings)
 
 2. **Supabase Redirect Configuration**
    Add the public URL (e.g., `https://<username>.github.io/docRepo/`) to **Authentication > URL Configuration > Redirect URLs** in the Supabase dashboard.

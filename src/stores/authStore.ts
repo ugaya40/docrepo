@@ -34,6 +34,7 @@ export const useAuthStore = create<AuthStore>()(
           provider: 'github',
           options: {
             scopes: 'repo read:user',
+            redirectTo: window.location.origin + import.meta.env.BASE_URL,
           },
         });
       },

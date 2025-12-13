@@ -13,7 +13,7 @@ export const LoginScreen: React.FC = () => {
     <div className={`min-h-screen flex items-center justify-center p-4 ${isLight ? 'bg-slate-100' : 'bg-slate-950'}`}>
       <div className={`w-full max-w-md border rounded-2xl p-8 shadow-2xl text-center ${isLight ? 'bg-white border-slate-200' : 'bg-slate-900 border-slate-800'}`}>
         <div className="flex justify-center mb-6">
-          <img src="/cap.png" alt="docRepo" className="w-25 h-25 object-contain drop-shadow-xl" />
+          <img src={`${import.meta.env.BASE_URL}cap.png`} alt="docRepo" className="w-25 h-25 object-contain drop-shadow-xl" />
         </div>
         <h1 className={`text-3xl font-bold mb-2 tracking-tight ${isLight ? 'text-slate-800' : 'text-white'}`}>docRepo</h1>
         <p className={`mb-8 ${isLight ? 'text-slate-500' : 'text-slate-400'}`}>

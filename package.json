@@ -6,6 +6,7 @@
   "scripts": {
     "predev": "npx tsx scripts/generateKatexEmbeddedCss.ts",
     "dev": "vite",
+    "dev:subdir": "VITE_BASE_PATH=/docRepo/ vite",
     "prebuild": "npx tsx scripts/generateKatexEmbeddedCss.ts",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
