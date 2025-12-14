@@ -10,7 +10,7 @@ export const useDefineDynamicState = <T>(key: string, initialValue: T) => {
 
   if (prevKeyRef.current !== key) {
     if (state.states.has(key)) {
-      throw new Error(`Dynamic state "${key}" is already defined.`);
+      return;
     }
     state.init(key, initialValueRef.current);
     prevKeyRef.current = key;

@@ -3,6 +3,8 @@ import GithubSlugger from 'github-slugger';
 import { useContentStore } from '../../stores/contentStore';
 import { useThemeStore } from '../../stores/themeStore';
 
+import { useActiveItem } from '../../hooks/useActiveItem';
+
 interface TocItem {
   id: string;
   text: string;
@@ -51,6 +53,11 @@ export const TableOfContents: React.FC = () => {
     return items;
   }, [content]);
 
+  const activeId = useActiveItem(
+    toc.map((item) => item.id),
+    { rootSelector: '#main-scroll-container', activeZoneRatio: 0.2, threshold: 0.1 }
+  );
+
   if (toc.length === 0) {
     return null;
   }
@@ -59,12 +66,7 @@ export const TableOfContents: React.FC = () => {
     e.preventDefault();
     const element = document.getElementById(id);
     if (element) {
-      // Adjust scroll position to account for sticky header or padding if needed
-      // Currently just scrolling into view
       element.scrollIntoView({ behavior: 'smooth' });
-
-      // Update URL hash without jumping
-      history.pushState(null, '', `#${id}`);
     }
   };
 
@@ -101,7 +103,14 @@ export const TableOfContents: React.FC = () => {
               className={`
                 block transition-colors duration-200
                 hover:underline
-                ${isLight ? 'text-slate-600 hover:text-slate-900' : 'text-slate-400 hover:text-slate-100'}
+                ${activeId === item.id
+                  ? isLight
+                    ? 'text-indigo-600 font-medium'
+                    : 'text-indigo-400 font-medium'
+                  : isLight
+                    ? 'text-slate-600 hover:text-slate-900'
+                    : 'text-slate-400 hover:text-slate-100'
+                }
               `}
             >
               {item.text}
