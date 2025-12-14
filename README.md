@@ -11,7 +11,7 @@ A key feature is the ability to export documents as a **single, self-contained H
 
 **Completely read-only**, displaying only .md files. (The tree is displayed with Compact Folders for better navigation)
 
-![docRepo Main Screen](screenshots/dark.png)
+![docRepo Main Screen](screenshots/light.png)
 
 ## Motivation
 
@@ -38,7 +38,7 @@ docRepo was developed with the goal of treating GitHub as your document reposito
   - **Table of Contents**: Auto-generated handy Table of Contents
 - **API Rate Limit Visibility**: Always see your remaining GitHub API calls.
 - **Dark/Light Mode**: Follows your OS theme by default, with manual switching available.
-![LightMode](screenshots/light.png)
+![LightMode](screenshots/dark.png)
 
 ### Mobile Support
 
