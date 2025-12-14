@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import mermaid from 'mermaid';
+import { getMermaid, generateMermaidId, wrapWithMermaidTheme } from '../utils/mermaidUtils';
 import { useThemeStore } from '../../../stores/themeStore';
 import { contentRenderSession } from '../../../stores/sessions/contentRenderSession';
-import { generateMermaidId, wrapWithMermaidTheme } from '../utils/mermaidUtils';
+
 
 interface MermaidRendererProps {
   chart: string;
@@ -23,6 +23,7 @@ export const MermaidRenderer: React.FC<MermaidRendererProps> = ({ chart }) => {
       try {
         const idLight = generateMermaidId('mermaid-light');
         const lightSrc = wrapWithMermaidTheme(chart, 'default');
+        const mermaid = await getMermaid();
         const { svg: rawLight } = await mermaid.render(idLight, lightSrc);
         const lightSvg = processSvg(rawLight);
 

@@ -1,4 +1,5 @@
-import type { MermaidConfig } from 'mermaid';
+import type { Mermaid, MermaidConfig } from 'mermaid';
+
 
 /**
  * Shared base configuration for Mermaid across the application.
@@ -32,4 +33,21 @@ export const wrapWithMermaidTheme = (src: string, theme: 'default' | 'dark'): st
  */
 export const generateMermaidId = (prefix: string = 'mermaid'): string => {
   return `${prefix}-${Math.random().toString(36).slice(2, 9)}`;
+};
+
+let mermaidPromise: Promise<Mermaid> | null = null;
+
+/**
+ * Lazy loads and initializes mermaid.
+ * Ensures initialization happens only once.
+ */
+export const getMermaid = (): Promise<Mermaid> => {
+  if (!mermaidPromise) {
+    mermaidPromise = import('mermaid').then((m) => {
+      const mermaidInstance = m.default;
+      mermaidInstance.initialize(MERMAID_BASE_CONFIG);
+      return mermaidInstance;
+    });
+  }
+  return mermaidPromise;
 };

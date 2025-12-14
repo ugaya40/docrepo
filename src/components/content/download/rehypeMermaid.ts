@@ -1,7 +1,6 @@
 import { visit } from 'unist-util-visit';
 import type { Root, Element } from 'hast';
-import mermaid from 'mermaid';
-import { generateMermaidId, wrapWithMermaidTheme } from '../utils/mermaidUtils';
+import { getMermaid, generateMermaidId, wrapWithMermaidTheme } from '../utils/mermaidUtils';
 
 const svgToBase64Img = (svg: string): Element => {
   const maxWidthMatch = svg.match(/style="[^"]*max-width:\s*([^;"]+)/);
@@ -60,6 +59,7 @@ export const rehypeMermaid = () => {
       try {
         const id = generateMermaidId();
         const themeSrc = wrapWithMermaidTheme(chartCode, 'default');
+        const mermaid = await getMermaid();
         const { svg } = await mermaid.render(id, themeSrc);
         const imgNode = svgToBase64Img(svg);
 
