@@ -46,7 +46,7 @@ export const SideHeader: React.FC = () => {
 
       <div className="flex items-center gap-2">
         <FolderGit2 size={14} className="text-slate-500 shrink-0" />
-        <div className="relative flex-1">
+        <div className="relative flex-1 min-w-0">
           {isLoadingRepos ? (
             <div className={`w-full border text-sm rounded-lg p-2 flex items-center gap-2 ${isLight ? 'bg-white border-slate-300 text-slate-500' : 'bg-slate-950 border-slate-700 text-slate-400'}`}>
               <Loader2 size={12} className="animate-spin" />
@@ -73,7 +73,7 @@ export const SideHeader: React.FC = () => {
       {selectedRepo && (
         <div className="flex items-center gap-2 mt-2">
           <GitBranch size={14} className="text-slate-500 shrink-0" />
-          <div className="relative flex-1">
+          <div className="relative flex-1 min-w-0">
             {isLoadingBranches ? (
               <div className={`w-full border text-sm rounded-lg p-2 flex items-center gap-2 ${isLight ? 'bg-white border-slate-300 text-slate-500' : 'bg-slate-950 border-slate-700 text-slate-400'}`}>
                 <Loader2 size={12} className="animate-spin" />
